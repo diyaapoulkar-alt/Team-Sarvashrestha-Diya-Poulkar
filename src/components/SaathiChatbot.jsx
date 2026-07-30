@@ -8,7 +8,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const [isOpen, setIsOpen] = useState(isFullPage);
   const [isExpanded, setIsExpanded] = useState(isFullPage);
   const [isMicActive, setIsMicActive] = useState(false);
-  const [continuousVoiceMode, setContinuousVoiceMode] = useState(true); // Hands-free ChatGPT Voice Mode
 
   const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am Saathi, your interactive Multimodal AI Study Copilot. Ask me anything, or try one of the fun learning modes below!';
 
@@ -37,6 +36,21 @@ export default function SaathiChatbot({ isFullPage = false }) {
     }
   }, [messages, isOpen, isFullPage]);
 
+  // Academic Phonetic Auto-Corrector for Mic Input Accuracy
+  const fastCorrect = (text) => {
+    if (!text) return '';
+    let c = text;
+    c = c.replace(/\b(can u hear me|can you hear|can u hear)\b/gi, 'can you hear me');
+    c = c.replace(/\b(all law|om law|oms law|arm law)\b/gi, "Ohm's Law");
+    c = c.replace(/\b(kirchoff|kirkoff|kirchoff's)\b/gi, "Kirchhoff's Law");
+    c = c.replace(/\b(diode|diodes)\b/gi, 'P-N Junction Diode');
+    c = c.replace(/\b(transistor|bjt)\b/gi, 'Bipolar Junction Transistor');
+    c = c.replace(/\b(resistor|resistors)\b/gi, 'Resistor');
+    c = c.replace(/\b(capacitor|capacitors)\b/gi, 'Capacitor');
+    c = c.replace(/\b(pop quiz|quiz me)\b/gi, 'Pop Quiz');
+    return c;
+  };
+
   // Continuous Hands-Free Voice Conversation Loop with Instant Audio Barge-In Interrupt
   const toggleVoiceInput = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -62,7 +76,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
       lastSpokenRef.current = '';
       
       const recognition = new SpeechRecognition();
-      recognition.continuous = true;
+      recognition.continuous = false;
       recognition.interimResults = true;
       recognition.lang = 'en-US';
 
@@ -76,45 +90,30 @@ export default function SaathiChatbot({ isFullPage = false }) {
         stopSpeaking();
 
         let currentText = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          const raw = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            if (raw.trim()) {
-              sendMessage(raw.trim());
-              lastSpokenRef.current = '';
-            }
-          } else {
-            currentText += raw;
-          }
+        for (let i = 0; i < event.results.length; ++i) {
+          currentText += event.results[i][0].transcript;
         }
 
-        if (currentText.trim()) {
-          lastSpokenRef.current = currentText.trim();
-          setInputText(currentText.trim());
+        const cleaned = fastCorrect(currentText.trim());
+        if (cleaned) {
+          lastSpokenRef.current = cleaned;
+          setInputText(cleaned);
         }
       };
 
       recognition.onerror = (err) => {
-        if (err.error === 'no-speech' || err.error === 'network' || err.error === 'aborted') {
-          // Auto restart in continuous mode
-          if (isMicActiveRef.current) {
-            setTimeout(() => {
-              if (isMicActiveRef.current && recognitionRef.current) {
-                try { recognitionRef.current.start(); } catch(e){}
-              }
-            }, 200);
-          }
-        }
+        console.warn("Speech mic notice:", err);
+        setIsMicActive(false);
+        isMicActiveRef.current = false;
       };
 
       recognition.onend = () => {
-        if (isMicActiveRef.current) {
-          // Continuous loop: restart mic seamlessly
-          setTimeout(() => {
-            if (isMicActiveRef.current && recognitionRef.current) {
-              try { recognitionRef.current.start(); } catch(e){}
-            }
-          }, 200);
+        setIsMicActive(false);
+        isMicActiveRef.current = false;
+        if (lastSpokenRef.current && lastSpokenRef.current.trim()) {
+          const queryToSend = lastSpokenRef.current.trim();
+          lastSpokenRef.current = '';
+          sendMessage(queryToSend);
         }
       };
 
@@ -122,6 +121,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
       recognition.start();
     } catch (e) {
       console.error("Mic error:", e);
+      setIsMicActive(false);
     }
   };
 
@@ -198,14 +198,14 @@ export default function SaathiChatbot({ isFullPage = false }) {
             </div>
             <div>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Learning Studio</h3>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Elaborated exam-oriented tutor with continuous hands-free voice mode.</p>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Elaborated exam-oriented tutor with zero-latency voice mode.</p>
             </div>
           </div>
 
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             {isMicActive && (
               <span className="badge-emerald" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <Radio size={12} className="recording-pulse" /> Hands-Free Mic Active
+                <Radio size={12} className="recording-pulse" /> Voice Mic Active
               </span>
             )}
 
@@ -280,14 +280,14 @@ export default function SaathiChatbot({ isFullPage = false }) {
             onClick={toggleVoiceInput}
             className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
             style={{ padding: '0.75rem', borderRadius: '14px', color: isMicActive ? 'var(--accent-danger)' : '#ffffff' }}
-            title="Toggle Continuous Hands-Free Voice Conversation"
+            title="Toggle Voice Input"
           >
             {isMicActive ? <MicOff size={20} color="var(--accent-danger)" /> : <Mic size={20} />}
           </button>
 
           <input 
             type="text"
-            placeholder={isMicActive ? "Hands-Free Mic Active... Speak anytime!" : "Ask Saathi AI any study question..."}
+            placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             style={{
@@ -368,7 +368,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
               </div>
               <div>
                 <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Studio</h4>
-                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Hands-Free Voice & Exam Tutor</span>
+                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Voice & Multilingual Tutor</span>
               </div>
             </div>
 
@@ -438,14 +438,14 @@ export default function SaathiChatbot({ isFullPage = false }) {
               onClick={toggleVoiceInput}
               className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
               style={{ padding: '0.55rem', borderRadius: '12px' }}
-              title="Toggle Continuous Hands-Free Voice Mode"
+              title="Toggle Voice Mode"
             >
               {isMicActive ? <MicOff size={16} color="var(--accent-danger)" /> : <Mic size={16} />}
             </button>
 
             <input 
               type="text"
-              placeholder={isMicActive ? "Hands-free mic listening..." : "Ask Saathi AI any study question..."}
+              placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{

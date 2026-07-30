@@ -98,9 +98,9 @@ export async function extractTextWithOCR(imageSrc, isHandwritten = false) {
 }
 
 /**
- * High-Speed Groq API caller (Timeout 4s limit)
+ * High-Speed Groq API caller (Timeout 3s limit)
  */
-async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 500) {
+async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 400) {
   const apiKey = getGroqApiKey();
 
   if (!apiKey || apiKey === 'gsk_your_groq_api_key_here') {
@@ -108,7 +108,7 @@ async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 500) 
   }
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
+  const timeoutId = setTimeout(() => controller.abort(), 3000);
 
   try {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -200,11 +200,11 @@ Instructions:
     }
   ];
 
-  const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.1, 480);
-  if (result70b && result70b.trim()) return result70b;
-
   const fastResult = await callGroqApi("llama-3.1-8b-instant", messages, 0.1, 400);
   if (fastResult && fastResult.trim()) return fastResult;
+
+  const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.1, 480);
+  if (result70b && result70b.trim()) return result70b;
 
   if (hasExtractedText) {
     return `📌 **Visual Description for "${cleanName}"**:
@@ -296,7 +296,7 @@ Return valid JSON with keys: "spokenText" and "breakdown" (array of strings).`;
 }
 
 /**
- * Saathi AI Assistant Chatbot (Smart Voice-Aware & Academic Engine)
+ * Saathi AI Assistant Chatbot (Smart Ultra-Fast Voice-Aware Engine)
  */
 export async function askSaathiAssistant(userMessage, chatHistory = [], profileContext = {}) {
   const lowerMsg = userMessage.toLowerCase().trim();
@@ -331,11 +331,12 @@ Structure with:
     { role: "user", content: userMessage }
   ];
 
-  const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.2, 500);
-  if (result70b && result70b.trim()) return result70b;
-
-  const result8b = await callGroqApi("llama-3.1-8b-instant", messages, 0.2, 450);
+  // Try ultra-fast 8B model first for zero latency (<150ms)
+  const result8b = await callGroqApi("llama-3.1-8b-instant", messages, 0.2, 380);
   if (result8b && result8b.trim()) return result8b;
+
+  const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.2, 450);
+  if (result70b && result70b.trim()) return result70b;
 
   return `📌 **Exam-Oriented Explanation for "${userMessage}"**:
 
