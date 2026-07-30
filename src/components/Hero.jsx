@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, Ear, Brain, Accessibility, Sparkles, ArrowRight, ShieldCheck, Zap, HeartHandshake } from 'lucide-react';
+import { Eye, Ear, Brain, Accessibility, Sparkles, ArrowRight } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
 
@@ -9,19 +9,19 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
   const t = (key) => getTranslation(targetLanguage, key);
 
   return (
-    <div className="animate-fade-up" style={{ width: '100%', maxWidth: '1200px', padding: '2rem 1.5rem', margin: '0 auto' }}>
+    <div className="animate-fade-up" style={{ width: '100%', maxWidth: '1200px', padding: '2rem 1.5rem', margin: '0 auto', color: '#0f172a' }}>
       
       {/* Hero Badge */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
         <span className="badge-cyan glowing-border animate-pop" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
-          <Sparkles size={16} color="var(--accent-cyan)" />
+          <Sparkles size={16} color="#0284c7" />
           {t('heroBadge')}
         </span>
       </div>
 
       {/* Main Hero Heading */}
       <div style={{ textAlign: 'center', maxWidth: '900px', margin: '0 auto 1.5rem auto' }}>
-        <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.6rem)', fontWeight: 800, lineHeight: 1.25, marginBottom: '1.25rem', color: '#ffffff' }}>
+        <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.6rem)', fontWeight: 800, lineHeight: 1.25, marginBottom: '1.25rem', color: '#0f172a' }}>
           {t('heroTitle')}
         </h1>
 
@@ -45,7 +45,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
           className="btn-secondary"
           style={{ padding: '0.9rem 2rem', fontSize: '1.05rem', borderRadius: '16px' }}
         >
-          <Sparkles size={20} color="var(--accent-cyan)" />
+          <Sparkles size={20} color="#0284c7" />
           {t('tryAiStudio')}
         </button>
       </div>
@@ -75,7 +75,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
 
       {/* Assistive Profiles Interactive Simulator */}
       <div style={{ marginBottom: '2rem' }}>
-        <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff', marginBottom: '1.25rem', textAlign: 'center' }}>
+        <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0f172a', marginBottom: '1.25rem', textAlign: 'center' }}>
           {t('simulatorTitle')} <span style={{ color: 'var(--accent-cyan)' }}>ACTIVE: {activeProfile.toUpperCase()}</span>
         </h3>
 
@@ -88,10 +88,10 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
             style={{ cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(99,102,241,0.2)' }}>
+              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(71,85,105,0.15)' }}>
                 <Eye size={24} color="var(--accent-primary)" />
               </div>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }}>{t('visualAssist')}</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>{t('visualAssist')}</h4>
             </div>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               {t('simVisualDesc')}
@@ -105,10 +105,10 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
             style={{ cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(16,185,129,0.2)' }}>
+              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(5,150,105,0.15)' }}>
                 <Ear size={24} color="var(--accent-emerald)" />
               </div>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }}>{t('hearingAssist')}</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>{t('hearingAssist')}</h4>
             </div>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               {t('simHearingDesc')}
@@ -122,10 +122,10 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
             style={{ cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(6,182,212,0.2)' }}>
+              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(2,132,199,0.15)' }}>
                 <Brain size={24} color="var(--accent-cyan)" />
               </div>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }}>{t('cognitiveDyslexia')}</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>{t('cognitiveDyslexia')}</h4>
             </div>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               {t('simCognitiveDesc')}
@@ -139,10 +139,10 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
             style={{ cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(168,85,247,0.2)' }}>
+              <div style={{ padding: '0.6rem', borderRadius: '12px', background: 'rgba(100,116,139,0.15)' }}>
                 <Accessibility size={24} color="var(--accent-secondary)" />
               </div>
-              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }}>{t('motorAssist')}</h4>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>{t('motorAssist')}</h4>
             </div>
             <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
               {t('simMotorDesc')}

@@ -13,7 +13,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
     <header style={{
       width: '100%',
       padding: '1rem 1.75rem',
-      background: 'rgba(15, 23, 42, 0.85)',
+      background: 'rgba(241, 245, 249, 0.95)',
       backdropFilter: 'blur(16px)',
       borderBottom: '1px solid var(--border-color)',
       display: 'flex',
@@ -21,7 +21,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
       justifyContent: 'space-between',
       position: 'sticky',
       top: 0,
-      zIndex: 90
+      zIndex: 90,
+      color: '#0f172a'
     }}>
       {/* Brand Emblem Logo */}
       <div 
@@ -32,21 +33,21 @@ export default function Navbar({ activeTab, setActiveTab }) {
           width: '44px',
           height: '44px',
           borderRadius: '14px',
-          background: 'rgba(30, 41, 59, 0.9)',
+          background: '#ffffff',
           border: '1px solid var(--border-color)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
+          boxShadow: '0 2px 10px rgba(0,0,0,0.08)'
         }}>
           <SaathiLogoIcon size={32} />
         </div>
 
         <div>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', lineHeight: 1.1 }}>
+          <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1.1 }}>
             {t('copilotBrand')}
           </h1>
-          <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>
+          <span style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>
             {t('tagline')}
           </span>
         </div>
@@ -59,7 +60,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           className={`btn-secondary ${activeTab === 'dashboard' ? 'glowing-border' : ''}`}
           style={{ padding: '0.55rem 1.1rem', fontSize: '0.88rem' }}
         >
-          <LayoutDashboard size={16} color="var(--accent-primary)" />
+          <LayoutDashboard size={16} color="#475569" />
           <span>{t('dashboardTab')}</span>
         </button>
 
@@ -68,7 +69,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           className={`btn-secondary ${activeTab === 'studio' ? 'glowing-border' : ''}`}
           style={{ padding: '0.55rem 1.1rem', fontSize: '0.88rem' }}
         >
-          <Sparkles size={16} color="#c084fc" />
+          <Sparkles size={16} color="#0284c7" />
           <span>{t('studioTab')}</span>
         </button>
       </nav>

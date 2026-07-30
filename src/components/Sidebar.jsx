@@ -34,15 +34,16 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
     <aside style={{
       width: isOpen ? '280px' : '76px',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-      background: 'rgba(15, 23, 42, 0.95)',
+      background: 'rgba(241, 245, 249, 0.96)', // Silver Light Grey
       borderRight: '1px solid var(--border-color)',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
-      zIndex: 110, // Higher than Navbar (zIndex: 90) so button is never covered or cut in half
+      zIndex: 110,
       backdropFilter: 'blur(16px)',
       flexShrink: 0,
-      overflow: 'visible'
+      overflow: 'visible',
+      color: '#0f172a'
     }}>
 
       {/* 100% Fully Visible Toggle Arrow Button - Positioned Below Navbar */}
@@ -50,19 +51,19 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'absolute',
-          top: '85px', // Positioned below Navbar so it's 100% visible
+          top: '85px',
           right: '-16px',
           width: '32px',
           height: '32px',
           borderRadius: '50%',
           background: 'var(--accent-primary)',
-          border: '2px solid #0f172a',
+          border: '2px solid #ffffff',
           color: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.6)',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
           zIndex: 999
         }}
         title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
@@ -72,12 +73,12 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
 
       {/* Sidebar Header */}
       <div style={{ padding: '1.25rem 1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(30, 41, 59, 0.9)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#ffffff', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
           <SaathiLogoIcon size={28} />
         </div>
         {isOpen && (
           <div style={{ overflow: 'hidden' }}>
-            <h3 style={{ fontSize: '0.98rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap' }}>
+            <h3 style={{ fontSize: '0.98rem', fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap' }}>
               {t('accessibilityModes')}
             </h3>
             <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', whiteSpace: 'nowrap' }}>
@@ -106,7 +107,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'visual' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            background: activeProfile === 'visual' ? 'rgba(99, 102, 241, 0.15)' : '#ffffff',
             borderColor: activeProfile === 'visual' ? 'var(--accent-primary)' : 'var(--border-color)',
             width: '100%',
             borderRadius: '12px',
@@ -117,7 +118,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Eye size={20} color="var(--accent-primary)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('visualAssist')}</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap' }}>{t('visualAssist')}</span>}
         </button>
 
         {/* 2. Hearing Assist */}
@@ -130,7 +131,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'hearing' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            background: activeProfile === 'hearing' ? 'rgba(16, 185, 129, 0.15)' : '#ffffff',
             borderColor: activeProfile === 'hearing' ? 'var(--accent-emerald)' : 'var(--border-color)',
             width: '100%',
             borderRadius: '12px',
@@ -141,7 +142,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Ear size={20} color="var(--accent-emerald)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('hearingAssist')}</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap' }}>{t('hearingAssist')}</span>}
         </button>
 
         {/* 3. Cognitive / Dyslexia */}
@@ -154,7 +155,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'cognitive' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            background: activeProfile === 'cognitive' ? 'rgba(6, 182, 212, 0.15)' : '#ffffff',
             borderColor: activeProfile === 'cognitive' ? 'var(--accent-cyan)' : 'var(--border-color)',
             width: '100%',
             borderRadius: '12px',
@@ -165,7 +166,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Brain size={20} color="var(--accent-cyan)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('cognitiveDyslexia')}</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap' }}>{t('cognitiveDyslexia')}</span>}
         </button>
 
         {/* 4. Motor Assist */}
@@ -178,7 +179,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'motor' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            background: activeProfile === 'motor' ? 'rgba(168, 85, 247, 0.15)' : '#ffffff',
             borderColor: activeProfile === 'motor' ? 'var(--accent-secondary)' : 'var(--border-color)',
             width: '100%',
             borderRadius: '12px',
@@ -189,7 +190,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Accessibility size={20} color="var(--accent-secondary)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('motorAssist')}</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap' }}>{t('motorAssist')}</span>}
         </button>
 
         {/* Quick Customization Controls */}
@@ -245,9 +246,9 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
                 value={targetLanguage}
                 onChange={(e) => setTargetLanguage(e.target.value)}
                 style={{
-                  background: 'rgba(255,255,255,0.08)',
+                  background: '#ffffff',
                   border: '1px solid var(--border-color)',
-                  color: '#ffffff',
+                  color: '#0f172a',
                   padding: '0.4rem 0.6rem',
                   borderRadius: '8px',
                   fontSize: '0.85rem',
@@ -255,9 +256,9 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
                   width: '100%'
                 }}
               >
-                <option value="en" style={{ background: '#0f172a', color: '#fff' }}>English (US)</option>
-                <option value="hi" style={{ background: '#0f172a', color: '#fff' }}>Hindi (हिंदी)</option>
-                <option value="mr" style={{ background: '#0f172a', color: '#fff' }}>Marathi (मराठी)</option>
+                <option value="en">English (US)</option>
+                <option value="hi">Hindi (हिंदी)</option>
+                <option value="mr">Marathi (मराठी)</option>
               </select>
             </div>
           </>
