@@ -9,8 +9,6 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
   const { 
     activeProfile, 
     applyProfilePreset, 
-    themeMode, 
-    setThemeMode, 
     fontSize, 
     setFontSize, 
     useOpenDyslexic, 
@@ -68,37 +66,48 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
 
       {/* Sidebar Header */}
       <div style={{ padding: '1.25rem 1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+        <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
           <Sparkles size={20} />
         </div>
         {isOpen && (
-          <div>
-            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Accessibility Modes</h3>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Click to open tool</span>
+          <div style={{ overflow: 'hidden' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap' }}>Accessibility Modes</h3>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', whiteSpace: 'nowrap' }}>Click to open tool</span>
           </div>
         )}
       </div>
 
       {/* Accessibility Presets List */}
-      <div style={{ padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1, overflowY: 'auto' }}>
+      <div style={{ padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1, overflowY: 'auto' }}>
         
-        {isOpen && <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '0.5rem' }}>Presets:</span>}
+        {isOpen && (
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '0.5rem', marginBottom: '0.2rem' }}>
+            Presets:
+          </span>
+        )}
 
         {/* 1. Visual Assist */}
         <button
           onClick={() => handleModeClick('visual')}
           className={`btn-secondary ${activeProfile === 'visual' ? 'glowing-border' : ''}`}
           style={{
-            justify: isOpen ? 'flex-start' : 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: isOpen ? 'flex-start' : 'center',
+            gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'visual' ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
-            borderColor: activeProfile === 'visual' ? 'var(--accent-primary)' : 'transparent',
-            width: '100%'
+            background: activeProfile === 'visual' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            borderColor: activeProfile === 'visual' ? 'var(--accent-primary)' : 'var(--border-color)',
+            width: '100%',
+            borderRadius: '12px',
+            textAlign: 'left'
           }}
           title="Visual Assist Mode - Opens Describe This Camera"
         >
-          <Eye size={20} color="var(--accent-primary)" />
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff' }}>Visual Assist</span>}
+          <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+            <Eye size={20} color="var(--accent-primary)" />
+          </div>
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Visual Assist</span>}
         </button>
 
         {/* 2. Hearing Assist */}
@@ -106,16 +115,23 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           onClick={() => handleModeClick('hearing')}
           className={`btn-secondary ${activeProfile === 'hearing' ? 'glowing-border' : ''}`}
           style={{
-            justify: isOpen ? 'flex-start' : 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: isOpen ? 'flex-start' : 'center',
+            gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'hearing' ? 'rgba(16, 185, 129, 0.2)' : 'transparent',
-            borderColor: activeProfile === 'hearing' ? 'var(--accent-emerald)' : 'transparent',
-            width: '100%'
+            background: activeProfile === 'hearing' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            borderColor: activeProfile === 'hearing' ? 'var(--accent-emerald)' : 'var(--border-color)',
+            width: '100%',
+            borderRadius: '12px',
+            textAlign: 'left'
           }}
           title="Hearing Assist Mode - Opens Live Subtitles"
         >
-          <Ear size={20} color="var(--accent-emerald)" />
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff' }}>Hearing Assist</span>}
+          <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+            <Ear size={20} color="var(--accent-emerald)" />
+          </div>
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Hearing Assist</span>}
         </button>
 
         {/* 3. Cognitive / Dyslexia */}
@@ -123,16 +139,23 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           onClick={() => handleModeClick('cognitive')}
           className={`btn-secondary ${activeProfile === 'cognitive' ? 'glowing-border' : ''}`}
           style={{
-            justify: isOpen ? 'flex-start' : 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: isOpen ? 'flex-start' : 'center',
+            gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'cognitive' ? 'rgba(6, 182, 212, 0.2)' : 'transparent',
-            borderColor: activeProfile === 'cognitive' ? 'var(--accent-cyan)' : 'transparent',
-            width: '100%'
+            background: activeProfile === 'cognitive' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            borderColor: activeProfile === 'cognitive' ? 'var(--accent-cyan)' : 'var(--border-color)',
+            width: '100%',
+            borderRadius: '12px',
+            textAlign: 'left'
           }}
           title="Cognitive Assist Mode - Opens Textbook Simplifier"
         >
-          <Brain size={20} color="var(--accent-cyan)" />
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff' }}>Cognitive / Dyslexia</span>}
+          <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+            <Brain size={20} color="var(--accent-cyan)" />
+          </div>
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Cognitive / Dyslexia</span>}
         </button>
 
         {/* 4. Motor Assist */}
@@ -140,16 +163,23 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           onClick={() => handleModeClick('motor')}
           className={`btn-secondary ${activeProfile === 'motor' ? 'glowing-border' : ''}`}
           style={{
-            justify: isOpen ? 'flex-start' : 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: isOpen ? 'flex-start' : 'center',
+            gap: '0.75rem',
             padding: '0.75rem 0.85rem',
-            background: activeProfile === 'motor' ? 'rgba(168, 85, 247, 0.2)' : 'transparent',
-            borderColor: activeProfile === 'motor' ? 'var(--accent-secondary)' : 'transparent',
-            width: '100%'
+            background: activeProfile === 'motor' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+            borderColor: activeProfile === 'motor' ? 'var(--accent-secondary)' : 'var(--border-color)',
+            width: '100%',
+            borderRadius: '12px',
+            textAlign: 'left'
           }}
           title="Motor Assist Mode - Opens Math Reader"
         >
-          <Accessibility size={20} color="var(--accent-secondary)" />
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff' }}>Motor Assist</span>}
+          <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+            <Accessibility size={20} color="var(--accent-secondary)" />
+          </div>
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Motor Assist</span>}
         </button>
 
         {/* Quick Customization Controls */}
@@ -163,7 +193,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             <button 
               onClick={() => setReadingMaskActive(!readingMaskActive)}
               className={`btn-secondary ${readingMaskActive ? 'badge-cyan' : ''}`}
-              style={{ justifyContent: 'flex-start', padding: '0.65rem 0.85rem', fontSize: '0.85rem' }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem', padding: '0.65rem 0.85rem', fontSize: '0.85rem', textAlign: 'left', width: '100%' }}
             >
               <Focus size={16} color="var(--accent-cyan)" />
               <span>{readingMaskActive ? "Focus Line Guide (ON)" : "Focus Line Guide (OFF)"}</span>
@@ -188,7 +218,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             <button 
               onClick={() => setUseOpenDyslexic(!useOpenDyslexic)}
               className={`btn-secondary ${useOpenDyslexic ? 'badge-cyan' : ''}`}
-              style={{ justifyContent: 'flex-start', padding: '0.65rem 0.85rem', fontSize: '0.85rem' }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem', padding: '0.65rem 0.85rem', fontSize: '0.85rem', textAlign: 'left', width: '100%' }}
             >
               <BookOpen size={16} />
               <span>Dyslexia Font: {useOpenDyslexic ? 'ON' : 'OFF'}</span>
@@ -209,7 +239,8 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
                   padding: '0.4rem 0.6rem',
                   borderRadius: '8px',
                   fontSize: '0.85rem',
-                  outline: 'none'
+                  outline: 'none',
+                  width: '100%'
                 }}
               >
                 <option value="en" style={{ background: '#0f172a', color: '#fff' }}>English (US)</option>
