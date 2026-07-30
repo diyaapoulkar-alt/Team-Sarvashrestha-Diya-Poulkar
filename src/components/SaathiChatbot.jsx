@@ -1,60 +1,94 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Mic, Volume2, Sparkles, HelpCircle } from 'lucide-react';
+import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, HelpCircle, Gamepad2, Lightbulb, Smile, Award, Maximize2, Minimize2, RefreshCw } from 'lucide-react';
 import { askSaathiAssistant } from '../services/groqApi';
 import { useAccessibility } from '../context/AccessibilityContext';
 
-export default function SaathiChatbot() {
+export default function SaathiChatbot({ isFullPage = false }) {
   const { speakText, isSpeaking, stopSpeaking } = useAccessibility();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(isFullPage);
+  const [isExpanded, setIsExpanded] = useState(isFullPage);
+  const [isMicActive, setIsMicActive] = useState(false);
+
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'saathi',
-      text: 'Namaste! I am Saathi, your AI Accessibility Companion. How can I help your learning today?'
+      text: 'Namaste! I am Saathi, your interactive ChatGPT Study Companion. Ask me anything, or try one of the fun learning modes below!'
     }
   ]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
 
   const chatEndRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen || isFullPage) {
       chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isFullPage]);
 
-  // Interactive Quick Assistance FAQ Chips
-  const faqQuestions = [
+  // Voice Input Speech Recognition Setup
+  const toggleVoiceInput = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Microphone speech recognition is not supported in this browser. Please type your question!");
+      return;
+    }
+
+    if (isMicActive) {
+      setIsMicActive(false);
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch(e){}
+      }
+    } else {
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => setIsMicActive(true);
+        recognition.onresult = (event) => {
+          const spoken = event.results[0][0].transcript;
+          setInputText(spoken);
+          if (event.results[0].isFinal) {
+            setIsMicActive(false);
+            sendMessage(spoken);
+          }
+        };
+        recognition.onerror = () => setIsMicActive(false);
+        recognition.onend = () => setIsMicActive(false);
+
+        recognitionRef.current = recognition;
+        recognition.start();
+      } catch (e) {
+        setIsMicActive(false);
+      }
+    }
+  };
+
+  // Fun & Interactive Learning Prompt Chips
+  const funLearningChips = [
     {
-      label: '👁️ How to use Vision Assist?',
-      question: 'How do I use Vision Assist for blackboards or lab manuals?',
-      answer: 'Go to **Copilot Dashboard** → **Vision Assist**. Click **Turn Camera ON** to take a live photo, or click **Upload Image** to upload any poster/notes. Saathi will read out a 4-step narration automatically!'
+      label: '🎮 Pop Quiz Master',
+      icon: Gamepad2,
+      prompt: 'Give me a fun 3-question pop quiz on physics and electronics to test my knowledge!'
     },
     {
-      label: '🧏 How to turn on Live Subtitles?',
-      question: 'How do I turn on Live Lecture Captioning?',
-      answer: 'Select **Hearing Assist** in the left panel or click **Lecture Captioner** in the dashboard. Click **Start Live Microphone Stream** to see real-time scrolling captions!'
+      label: '💡 Explain Like I am 5',
+      icon: Lightbulb,
+      prompt: 'Explain how the internet and data packets work using a fun story for a 5-year-old!'
     },
     {
-      label: '🧠 How to simplify textbook PDFs?',
-      question: 'How do I simplify dense textbook PDFs or articles?',
-      answer: 'Click **Textbook Simplifier** in the dashboard. Select your reading level (5th Grade, High School) or language (Hindi, Marathi), paste text or upload a PDF, and click **Simplify Textbook Content**!'
+      label: '😂 Fun Academic Joke',
+      icon: Smile,
+      prompt: 'Tell me a clever, fun science or engineering joke to make studying fun!'
     },
     {
-      label: '📐 How to read LaTeX math formulas?',
-      question: 'How do I read LaTeX math formulas out loud?',
-      answer: 'Open **Math LaTeX Reader** in the dashboard. Paste any LaTeX formula (e.g. \\int_{0}^{\\infty} e^{-x^2} dx) and click **Synthesize Math Speech** to hear natural English spoken voice reading!'
-    },
-    {
-      label: '🔍 Camera / Mic Troubleshooting',
-      question: 'What if my camera or mic is not opening?',
-      answer: 'Ensure browser permissions are allowed for camera/mic. If blocked, click the lock icon next to your browser URL bar and set Camera & Microphone to "Allow", then refresh the page!'
-    },
-    {
-      label: '📖 Focus Line Guide for Dyslexia',
-      question: 'How do I enable Dyslexia Font and Focus Line Guide?',
-      answer: 'In the **Left Sidebar**, click **Dyslexia Font: ON** or toggle **Focus Line Guide (ON)** to display a floating highlight ruler that follows your mouse!'
+      label: '🏆 Study Motivation',
+      icon: Award,
+      prompt: 'Give me a 30-second high-energy study motivation quote and focus tip!'
     }
   ];
 
@@ -68,16 +102,7 @@ export default function SaathiChatbot() {
     setLoading(true);
 
     try {
-      // Check if matches FAQ exactly
-      const matchedFaq = faqQuestions.find(f => f.question.toLowerCase() === query.toLowerCase() || f.label.toLowerCase() === query.toLowerCase());
-      
-      let replyText = "";
-      if (matchedFaq) {
-        replyText = matchedFaq.answer;
-      } else {
-        replyText = await askSaathiAssistant(query, messages);
-      }
-
+      const replyText = await askSaathiAssistant(query, messages);
       const botMsg = { id: Date.now() + 1, sender: 'saathi', text: replyText };
       setMessages(prev => [...prev, botMsg]);
       speakText(replyText.replace(/[*#📌]/g, ''));
@@ -88,13 +113,140 @@ export default function SaathiChatbot() {
     }
   };
 
-  const handleFaqClick = (faq) => {
-    sendMessage(faq.question);
+  const clearChat = () => {
+    setMessages([
+      {
+        id: Date.now(),
+        sender: 'saathi',
+        text: 'Chat history cleared! What topic would you like to explore next?'
+      }
+    ]);
+    stopSpeaking();
   };
 
+  // If full-page view inside dashboard tab
+  if (isFullPage) {
+    return (
+      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '620px' }}>
+        
+        {/* Header Bar */}
+        <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 4px 15px rgba(99,102,241,0.4)' }}>
+              <Sparkles size={22} />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>ChatGPT Study Companion</h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Interactive AI Tutor with automatic voice readout & fun learning modes.</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            {isSpeaking && (
+              <button onClick={stopSpeaking} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
+                <VolumeX size={16} /> Stop Audio
+              </button>
+            )}
+            <button onClick={clearChat} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
+              <RefreshCw size={14} /> Clear Chat
+            </button>
+          </div>
+        </div>
+
+        {/* Fun Interactive Chips Bar */}
+        <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', padding: '0.75rem 0', borderBottom: '1px solid var(--border-color)' }}>
+          {funLearningChips.map((chip, idx) => {
+            const Icon = chip.icon;
+            return (
+              <button
+                key={idx}
+                onClick={() => sendMessage(chip.prompt)}
+                className="btn-secondary"
+                style={{ padding: '0.4rem 0.85rem', fontSize: '0.82rem', borderRadius: '12px', whiteSpace: 'nowrap', borderColor: 'rgba(99,102,241,0.3)' }}
+              >
+                <Icon size={14} color="var(--accent-cyan)" /> {chip.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Messages Stream */}
+        <div style={{ flex: 1, padding: '1rem 0', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {messages.map(msg => (
+            <div 
+              key={msg.id}
+              style={{
+                alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                maxWidth: '80%',
+                padding: '1rem 1.25rem',
+                borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
+                background: msg.sender === 'user' ? 'var(--accent-primary)' : '#0b0f19',
+                color: '#ffffff',
+                fontSize: '1rem',
+                lineHeight: 1.6,
+                border: msg.sender === 'saathi' ? '2px solid var(--border-color)' : 'none',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+              }}
+              className="animate-pop"
+            >
+              {msg.text}
+            </div>
+          ))}
+
+          {loading && (
+            <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <RefreshCw size={14} className="spin" /> ChatGPT is thinking & preparing voice narration...
+            </div>
+          )}
+
+          <div ref={chatEndRef} />
+        </div>
+
+        {/* Input Controls */}
+        <form 
+          onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
+          style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}
+        >
+          <button 
+            type="button"
+            onClick={toggleVoiceInput}
+            className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
+            style={{ padding: '0.75rem', borderRadius: '14px', color: isMicActive ? 'var(--accent-danger)' : '#ffffff' }}
+            title="Speak your question"
+          >
+            {isMicActive ? <MicOff size={20} color="var(--accent-danger)" /> : <Mic size={20} />}
+          </button>
+
+          <input 
+            type="text"
+            placeholder="Ask ChatGPT any study question..."
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            style={{
+              flex: 1,
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '14px',
+              padding: '0.75rem 1.1rem',
+              color: '#ffffff',
+              fontSize: '0.95rem',
+              outline: 'none'
+            }}
+          />
+
+          <button type="submit" className="btn-primary" style={{ padding: '0.75rem 1.5rem', borderRadius: '14px' }}>
+            <Send size={18} /> Send
+          </button>
+        </form>
+
+      </div>
+    );
+  }
+
+  // Floating Drawer Mode
   return (
     <>
-      {/* Floating Floating Trigger Button */}
+      {/* Floating Trigger Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -113,50 +265,49 @@ export default function SaathiChatbot() {
             boxShadow: '0 8px 32px rgba(99, 102, 241, 0.5)',
             zIndex: 99
           }}
-          title="Ask Saathi Accessibility Copilot"
+          title="Ask ChatGPT AI Companion"
         >
           <Sparkles size={28} />
         </button>
       )}
 
-      {/* Floating Chat Window Drawer */}
+      {/* Floating Chat Drawer Window */}
       {isOpen && (
         <div 
-          className="glass-panel"
+          className="glass-panel animate-pop"
           style={{
             position: 'fixed',
             bottom: '24px',
             right: '24px',
-            width: '380px',
-            maxHeight: '600px',
-            height: '80vh',
+            width: isExpanded ? '500px' : '380px',
+            height: isExpanded ? '650px' : '520px',
+            maxHeight: '85vh',
             borderRadius: '24px',
             display: 'flex',
             flexDirection: 'column',
             zIndex: 100,
             boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)',
             overflow: 'hidden',
-            border: '2px solid var(--accent-primary)'
+            border: '2px solid var(--accent-primary)',
+            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          {/* Drawer Header */}
-          <div style={{ padding: '1rem 1.25rem', background: 'rgba(99, 102, 241, 0.2)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Header Bar */}
+          <div style={{ padding: '0.85rem 1.1rem', background: 'rgba(99, 102, 241, 0.25)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
               <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                 <Sparkles size={20} />
               </div>
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Assistant</h4>
-                <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>Voice & Help Copilot</span>
+                <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>ChatGPT Companion</h4>
+                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Voice & Interactive Tutor</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              {isSpeaking && (
-                <button onClick={stopSpeaking} className="btn-secondary" style={{ padding: '0.3rem', borderRadius: '50%' }}>
-                  <Volume2 size={16} color="var(--accent-primary)" />
-                </button>
-              )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <button onClick={() => setIsExpanded(!isExpanded)} className="btn-secondary" style={{ padding: '0.3rem', borderRadius: '50%' }}>
+                {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              </button>
 
               <button onClick={() => setIsOpen(false)} className="btn-secondary" style={{ padding: '0.3rem', borderRadius: '50%' }}>
                 <X size={18} />
@@ -164,9 +315,22 @@ export default function SaathiChatbot() {
             </div>
           </div>
 
+          {/* Fun Learning Chips Bar */}
+          <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', padding: '0.5rem 0.75rem', background: 'rgba(0,0,0,0.3)', borderBottom: '1px solid var(--border-color)' }}>
+            {funLearningChips.map((chip, idx) => (
+              <button
+                key={idx}
+                onClick={() => sendMessage(chip.prompt)}
+                className="btn-secondary"
+                style={{ padding: '0.3rem 0.65rem', fontSize: '0.75rem', borderRadius: '12px', whiteSpace: 'nowrap', borderColor: 'rgba(99,102,241,0.3)' }}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+
           {/* Messages Area */}
           <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            
             {messages.map(msg => (
               <div 
                 key={msg.id}
@@ -187,47 +351,32 @@ export default function SaathiChatbot() {
             ))}
 
             {loading && (
-              <div style={{ alignSelf: 'flex-start', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                Saathi is thinking...
+              <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.85rem' }}>
+                ChatGPT is generating answer...
               </div>
             )}
 
             <div ref={chatEndRef} />
           </div>
 
-          {/* Quick Assistance FAQ Chips Section */}
-          <div style={{ padding: '0.5rem 0.75rem', background: 'rgba(0,0,0,0.3)', borderTop: '1px solid var(--border-color)' }}>
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.35rem' }}>
-              <HelpCircle size={12} /> Quick Assistance FAQs:
-            </span>
-            <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', paddingBottom: '0.35rem' }}>
-              {faqQuestions.map((faq, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleFaqClick(faq)}
-                  className="btn-secondary"
-                  style={{
-                    padding: '0.3rem 0.6rem',
-                    fontSize: '0.75rem',
-                    whiteSpace: 'nowrap',
-                    borderRadius: '12px',
-                    borderColor: 'rgba(99,102,241,0.3)'
-                  }}
-                >
-                  {faq.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Input Box */}
+          {/* Input Form */}
           <form 
             onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
             style={{ padding: '0.75rem', background: 'rgba(15, 23, 42, 0.95)', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '0.5rem' }}
           >
+            <button 
+              type="button"
+              onClick={toggleVoiceInput}
+              className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
+              style={{ padding: '0.55rem', borderRadius: '12px' }}
+              title="Speak your question"
+            >
+              {isMicActive ? <MicOff size={16} color="var(--accent-danger)" /> : <Mic size={16} />}
+            </button>
+
             <input 
               type="text"
-              placeholder="Ask Saathi any question..."
+              placeholder="Ask ChatGPT any study question..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{

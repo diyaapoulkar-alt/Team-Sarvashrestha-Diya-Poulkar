@@ -1,9 +1,10 @@
 import React from 'react';
-import { Camera, Mic, Brain, Calculator, ShieldCheck } from 'lucide-react';
+import { Camera, Mic, Brain, Calculator, Sparkles, MessageSquare, ShieldCheck } from 'lucide-react';
 import VisionAssist from './tools/VisionAssist';
 import LectureCaptioner from './tools/LectureCaptioner';
 import CognitiveSimplifier from './tools/CognitiveSimplifier';
 import LatexMathReader from './tools/LatexMathReader';
+import SaathiChatbot from './SaathiChatbot';
 import { useAccessibility } from '../context/AccessibilityContext';
 
 export default function Dashboard() {
@@ -39,16 +40,16 @@ export default function Dashboard() {
       </div>
 
       {/* Tool Tabs Selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
         
         <button 
           onClick={() => setActiveTool('vision')}
           className={`glass-card ${activeTool === 'vision' ? 'glowing-border' : ''}`}
-          style={{ cursor: 'pointer', textAlign: 'left', border: activeTool === 'vision' ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)', padding: '1.1rem' }}
+          style={{ cursor: 'pointer', textAlign: 'left', border: activeTool === 'vision' ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)', padding: '1rem' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div style={{ padding: '0.5rem', borderRadius: '10px', background: 'rgba(99,102,241,0.15)' }}>
-              <Camera size={22} color="var(--accent-primary)" />
+              <Camera size={20} color="var(--accent-primary)" />
             </div>
             <div>
               <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Vision Assist</strong>
@@ -60,15 +61,15 @@ export default function Dashboard() {
         <button 
           onClick={() => setActiveTool('captioner')}
           className={`glass-card ${(activeTool === 'captioner' || activeTool === 'caption') ? 'glowing-border' : ''}`}
-          style={{ cursor: 'pointer', textAlign: 'left', border: (activeTool === 'captioner' || activeTool === 'caption') ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)', padding: '1.1rem' }}
+          style={{ cursor: 'pointer', textAlign: 'left', border: (activeTool === 'captioner' || activeTool === 'caption') ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)', padding: '1rem' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div style={{ padding: '0.5rem', borderRadius: '10px', background: 'rgba(16,185,129,0.15)' }}>
-              <Mic size={22} color="var(--accent-emerald)" />
+              <Mic size={20} color="var(--accent-emerald)" />
             </div>
             <div>
               <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Lecture Captioner</strong>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Live Subtitles & Translation</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Live Subtitles & Stream</span>
             </div>
           </div>
         </button>
@@ -76,11 +77,11 @@ export default function Dashboard() {
         <button 
           onClick={() => setActiveTool('simplifier')}
           className={`glass-card ${activeTool === 'simplifier' ? 'glowing-border' : ''}`}
-          style={{ cursor: 'pointer', textAlign: 'left', border: activeTool === 'simplifier' ? '2px solid var(--accent-cyan)' : '1px solid var(--border-color)', padding: '1.1rem' }}
+          style={{ cursor: 'pointer', textAlign: 'left', border: activeTool === 'simplifier' ? '2px solid var(--accent-cyan)' : '1px solid var(--border-color)', padding: '1rem' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div style={{ padding: '0.5rem', borderRadius: '10px', background: 'rgba(6,182,212,0.15)' }}>
-              <Brain size={22} color="var(--accent-cyan)" />
+              <Brain size={20} color="var(--accent-cyan)" />
             </div>
             <div>
               <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Textbook Simplifier</strong>
@@ -92,15 +93,31 @@ export default function Dashboard() {
         <button 
           onClick={() => setActiveTool('latex')}
           className={`glass-card ${(activeTool === 'latex' || activeTool === 'math') ? 'glowing-border' : ''}`}
-          style={{ cursor: 'pointer', textAlign: 'left', border: (activeTool === 'latex' || activeTool === 'math') ? '2px solid var(--accent-secondary)' : '1px solid var(--border-color)', padding: '1.1rem' }}
+          style={{ cursor: 'pointer', textAlign: 'left', border: (activeTool === 'latex' || activeTool === 'math') ? '2px solid var(--accent-secondary)' : '1px solid var(--border-color)', padding: '1rem' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div style={{ padding: '0.5rem', borderRadius: '10px', background: 'rgba(168,85,247,0.15)' }}>
-              <Calculator size={22} color="var(--accent-secondary)" />
+              <Calculator size={20} color="var(--accent-secondary)" />
             </div>
             <div>
               <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Math LaTeX Reader</strong>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Formula Speech Synthesizer</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Formula Speech Parser</span>
+            </div>
+          </div>
+        </button>
+
+        <button 
+          onClick={() => setActiveTool('chatgpt')}
+          className={`glass-card ${activeTool === 'chatgpt' ? 'glowing-border' : ''}`}
+          style={{ cursor: 'pointer', textAlign: 'left', border: activeTool === 'chatgpt' ? '2px solid #a855f7' : '1px solid var(--border-color)', padding: '1rem' }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <div style={{ padding: '0.5rem', borderRadius: '10px', background: 'rgba(168,85,247,0.2)' }}>
+              <Sparkles size={20} color="#c084fc" />
+            </div>
+            <div>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>ChatGPT Tutor</strong>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Voice AI & Pop Quizzes</span>
             </div>
           </div>
         </button>
@@ -113,6 +130,7 @@ export default function Dashboard() {
         {(activeTool === 'captioner' || activeTool === 'caption') && <LectureCaptioner />}
         {activeTool === 'simplifier' && <CognitiveSimplifier />}
         {(activeTool === 'latex' || activeTool === 'math') && <LatexMathReader />}
+        {activeTool === 'chatgpt' && <SaathiChatbot isFullPage={true} />}
       </div>
 
     </div>
