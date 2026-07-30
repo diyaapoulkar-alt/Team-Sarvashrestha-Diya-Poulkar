@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, HelpCircle, Gamepad2, Lightbulb, Smile, Award, Maximize2, Minimize2, RefreshCw, Radio } from 'lucide-react';
 import { askSaathiAssistant } from '../services/groqApi';
 import { useAccessibility } from '../context/AccessibilityContext';
+import SaathiLogoIcon from './SaathiLogoIcon';
 
 export default function SaathiChatbot({ isFullPage = false }) {
   const { speakText, isSpeaking, stopSpeaking } = useAccessibility();
@@ -40,7 +41,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const renderFormattedMessage = (text) => {
     if (!text) return null;
 
-    // Split text into lines
     const lines = text.split('\n');
     const elements = [];
 
@@ -52,7 +52,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
         return;
       }
 
-      // Format bold text **word** inside line
       const parts = trimmed.split(/(\*\*.*?\*\*)/g);
       const lineContent = parts.map((part, pIdx) => {
         if (part.startsWith('**') && part.endsWith('**')) {
@@ -65,7 +64,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
         return part;
       });
 
-      // Heading detection (**Title:** or # Title)
       if (trimmed.startsWith('**') && (trimmed.endsWith(':**') || trimmed.endsWith('**'))) {
         elements.push(
           <div key={index} style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', marginTop: '0.6rem', marginBottom: '0.3rem' }}>
@@ -73,7 +71,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
           </div>
         );
       }
-      // Bullet list items (* item or + subitem or - item)
       else if (trimmed.startsWith('* ') || trimmed.startsWith('+ ') || trimmed.startsWith('- ')) {
         const bulletText = trimmed.substring(2);
         const bulletParts = bulletText.split(/(\*\*.*?\*\*)/g).map((part, pIdx) => {
@@ -94,7 +91,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
           </div>
         );
       }
-      // Standard paragraph
       else {
         elements.push(
           <p key={index} style={{ marginBottom: '0.35rem', lineHeight: 1.6 }}>
@@ -227,16 +223,15 @@ export default function SaathiChatbot({ isFullPage = false }) {
     const trimmedQuery = query.trim();
     const lower = trimmedQuery.toLowerCase();
 
-    // Instant Action Command Execution for "stop", "pause", "quiet", "mute", "cancel"
     if (lower === "stop" || lower === "pause" || lower === "quiet" || lower === "mute" || lower === "cancel" || lower === "stop speaking") {
-      stopSpeaking(); // Immediately stop TTS speech audio
+      stopSpeaking();
       const stopMsg = { id: Date.now() + 1, sender: 'saathi', text: 'Voice readout stopped. I am ready for your next study question!' };
       setMessages(prev => [...prev, { id: Date.now(), sender: 'user', text: trimmedQuery }, stopMsg]);
       setInputText('');
       return;
     }
 
-    stopSpeaking(); // Stop previous audio narration immediately
+    stopSpeaking();
 
     const userMsg = { id: Date.now(), sender: 'user', text: trimmedQuery };
     setMessages(prev => [...prev, userMsg]);
@@ -247,8 +242,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
       const replyText = await askSaathiAssistant(trimmedQuery, messages);
       const botMsg = { id: Date.now() + 1, sender: 'saathi', text: replyText };
       setMessages(prev => [...prev, botMsg]);
-      
-      // Auto read-aloud AI response
       speakText(replyText.replace(/[*#📌]/g, ''));
     } catch (err) {
       console.error(err);
@@ -276,8 +269,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
         {/* Header Bar */}
         <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 4px 15px rgba(99,102,241,0.4)' }}>
-              <Sparkles size={22} />
+            <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'rgba(30, 41, 59, 0.9)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(99,102,241,0.4)' }}>
+              <SaathiLogoIcon size={30} />
             </div>
             <div>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Learning Studio</h3>
@@ -345,7 +338,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
           {loading && (
             <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <RefreshCw size={14} className="spin" /> Saathi AI is generating exam-oriented answer & voice...
+              <RefreshCw size={14} className="spin" /> Saathi AI is generating answer & voice...
             </div>
           )}
 
@@ -405,19 +398,19 @@ export default function SaathiChatbot({ isFullPage = false }) {
             position: 'fixed',
             bottom: '24px',
             right: '24px',
-            width: '60px',
-            height: '60px',
+            width: '64px',
+            height: '64px',
             borderRadius: '50%',
             padding: 0,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 32px rgba(99, 102, 241, 0.5)',
+            boxShadow: '0 8px 32px rgba(99, 102, 241, 0.6)',
             zIndex: 99
           }}
           title="Ask Saathi AI Companion"
         >
-          <Sparkles size={28} />
+          <SaathiLogoIcon size={36} />
         </button>
       )}
 
@@ -445,8 +438,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
           {/* Header Bar */}
           <div style={{ padding: '0.85rem 1.1rem', background: 'rgba(99, 102, 241, 0.25)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-                <Sparkles size={20} />
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(30, 41, 59, 0.9)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <SaathiLogoIcon size={24} />
               </div>
               <div>
                 <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Studio</h4>

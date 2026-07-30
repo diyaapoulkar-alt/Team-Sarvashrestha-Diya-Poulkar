@@ -1,10 +1,11 @@
 import React from 'react';
 import { 
   Eye, Ear, Brain, Accessibility, ChevronLeft, ChevronRight, 
-  Type, Globe, Sparkles, BookOpen, Focus
+  Type, Globe, BookOpen, Focus
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
+import SaathiLogoIcon from './SaathiLogoIcon';
 
 export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
   const { 
@@ -71,8 +72,8 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
 
       {/* Sidebar Header */}
       <div style={{ padding: '1.25rem 1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--gradient-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0 }}>
-          <Sparkles size={20} />
+        <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(30, 41, 59, 0.9)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <SaathiLogoIcon size={28} />
         </div>
         {isOpen && (
           <div style={{ overflow: 'hidden' }}>
@@ -102,7 +103,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: isOpen ? 'flex-start' : 'center',
+            justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
             background: activeProfile === 'visual' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.04)',
@@ -126,7 +127,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: isOpen ? 'flex-start' : 'center',
+            justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
             background: activeProfile === 'hearing' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.04)',
@@ -150,7 +151,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: isOpen ? 'flex-start' : 'center',
+            justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
             background: activeProfile === 'cognitive' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255, 255, 255, 0.04)',
@@ -174,7 +175,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: isOpen ? 'flex-start' : 'center',
+            justify: isOpen ? 'flex-start' : 'center',
             gap: '0.75rem',
             padding: '0.75rem 0.85rem',
             background: activeProfile === 'motor' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(255, 255, 255, 0.04)',

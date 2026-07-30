@@ -1,7 +1,8 @@
 import React from 'react';
-import { Eye, LayoutDashboard, Sparkles, UserCheck } from 'lucide-react';
+import { LayoutDashboard, Sparkles, UserCheck } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
+import SaathiLogoIcon from './SaathiLogoIcon';
 
 export default function Navbar({ activeTab, setActiveTab }) {
   const { user, activeProfile, targetLanguage } = useAccessibility();
@@ -28,17 +29,17 @@ export default function Navbar({ activeTab, setActiveTab }) {
         style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}
       >
         <div style={{
-          width: '42px',
-          height: '42px',
+          width: '44px',
+          height: '44px',
           borderRadius: '14px',
-          background: 'var(--gradient-brand)',
+          background: 'rgba(30, 41, 59, 0.9)',
+          border: '1px solid var(--border-color)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#ffffff',
           boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)'
         }}>
-          <Eye size={24} />
+          <SaathiLogoIcon size={32} />
         </div>
 
         <div>
