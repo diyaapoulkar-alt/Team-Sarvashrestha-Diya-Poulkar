@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, HelpCircle, Gamepad2, Lightbulb, Smile, Award, Maximize2, Minimize2, RefreshCw } from 'lucide-react';
+import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, HelpCircle, Gamepad2, Lightbulb, Smile, Award, Maximize2, Minimize2, RefreshCw, Radio } from 'lucide-react';
 import { askSaathiAssistant } from '../services/groqApi';
 import { useAccessibility } from '../context/AccessibilityContext';
 
@@ -8,6 +8,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const [isOpen, setIsOpen] = useState(isFullPage);
   const [isExpanded, setIsExpanded] = useState(isFullPage);
   const [isMicActive, setIsMicActive] = useState(false);
+  const [continuousVoiceMode, setContinuousVoiceMode] = useState(true); // Hands-free ChatGPT Voice Mode
 
   const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am Saathi, your interactive Multimodal AI Study Copilot. Ask me anything, or try one of the fun learning modes below!';
 
@@ -24,6 +25,11 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const chatEndRef = useRef(null);
   const recognitionRef = useRef(null);
   const lastSpokenRef = useRef('');
+  const isMicActiveRef = useRef(false);
+
+  useEffect(() => {
+    isMicActiveRef.current = isMicActive;
+  }, [isMicActive]);
 
   useEffect(() => {
     if (isOpen || isFullPage) {
@@ -31,7 +37,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
     }
   }, [messages, isOpen, isFullPage]);
 
-  // Reliable Microphone Input Stream Handler
+  // Continuous Hands-Free Voice Conversation Loop with Instant Audio Barge-In Interrupt
   const toggleVoiceInput = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -41,50 +47,81 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
     if (isMicActive) {
       setIsMicActive(false);
+      isMicActiveRef.current = false;
       if (recognitionRef.current) {
         try { recognitionRef.current.stop(); } catch(e){}
       }
     } else {
-      try {
-        lastSpokenRef.current = '';
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
+      startContinuousSpeech(SpeechRecognition);
+    }
+  };
 
-        recognition.onstart = () => setIsMicActive(true);
+  const startContinuousSpeech = (SpeechRecognition) => {
+    try {
+      stopSpeaking(); // Stop AI voice immediately if user clicks mic
+      lastSpokenRef.current = '';
+      
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
 
-        recognition.onresult = (event) => {
-          let currentText = '';
-          for (let i = 0; i < event.results.length; ++i) {
-            currentText += event.results[i][0].transcript;
+      recognition.onstart = () => {
+        setIsMicActive(true);
+        isMicActiveRef.current = true;
+      };
+
+      recognition.onresult = (event) => {
+        // INSTANT AUDIO BARGE-IN: Stop AI speech if user starts speaking!
+        stopSpeaking();
+
+        let currentText = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const raw = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            if (raw.trim()) {
+              sendMessage(raw.trim());
+              lastSpokenRef.current = '';
+            }
+          } else {
+            currentText += raw;
           }
-          if (currentText.trim()) {
-            lastSpokenRef.current = currentText.trim();
-            setInputText(currentText.trim());
+        }
+
+        if (currentText.trim()) {
+          lastSpokenRef.current = currentText.trim();
+          setInputText(currentText.trim());
+        }
+      };
+
+      recognition.onerror = (err) => {
+        if (err.error === 'no-speech' || err.error === 'network' || err.error === 'aborted') {
+          // Auto restart in continuous mode
+          if (isMicActiveRef.current) {
+            setTimeout(() => {
+              if (isMicActiveRef.current && recognitionRef.current) {
+                try { recognitionRef.current.start(); } catch(e){}
+              }
+            }, 200);
           }
-        };
+        }
+      };
 
-        recognition.onerror = (err) => {
-          console.warn("Chatbot mic notice:", err);
-          setIsMicActive(false);
-        };
+      recognition.onend = () => {
+        if (isMicActiveRef.current) {
+          // Continuous loop: restart mic seamlessly
+          setTimeout(() => {
+            if (isMicActiveRef.current && recognitionRef.current) {
+              try { recognitionRef.current.start(); } catch(e){}
+            }
+          }, 200);
+        }
+      };
 
-        recognition.onend = () => {
-          setIsMicActive(false);
-          if (lastSpokenRef.current && lastSpokenRef.current.trim()) {
-            const queryToSend = lastSpokenRef.current.trim();
-            lastSpokenRef.current = '';
-            sendMessage(queryToSend);
-          }
-        };
-
-        recognitionRef.current = recognition;
-        recognition.start();
-      } catch (e) {
-        console.error("Mic start error:", e);
-        setIsMicActive(false);
-      }
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (e) {
+      console.error("Mic error:", e);
     }
   };
 
@@ -93,12 +130,12 @@ export default function SaathiChatbot({ isFullPage = false }) {
     {
       label: '🎮 Pop Quiz Master',
       icon: Gamepad2,
-      prompt: 'Give me a fun 3-question pop quiz on physics and electronics to test my knowledge!'
+      prompt: 'Give me a fun 3-question exam pop quiz with answers and bullet points to test my knowledge!'
     },
     {
       label: '💡 Explain Like I am 5',
       icon: Lightbulb,
-      prompt: 'Explain how the internet and data packets work using a fun story for a 5-year-old!'
+      prompt: 'Explain how Ohm\'s Law and resistors work using a fun story and bullet points!'
     },
     {
       label: '😂 Fun Academic Joke',
@@ -108,13 +145,15 @@ export default function SaathiChatbot({ isFullPage = false }) {
     {
       label: '🏆 Study Motivation',
       icon: Award,
-      prompt: 'Give me a 30-second high-energy study motivation quote and focus tip!'
+      prompt: 'Give me a 30-second high-energy study motivation quote and exam focus tip!'
     }
   ];
 
   const sendMessage = async (textToSend) => {
     const query = textToSend || inputText;
     if (!query || !query.trim() || loading) return;
+
+    stopSpeaking(); // Stop previous audio narration immediately
 
     const userMsg = { id: Date.now(), sender: 'user', text: query.trim() };
     setMessages(prev => [...prev, userMsg]);
@@ -125,6 +164,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
       const replyText = await askSaathiAssistant(query.trim(), messages);
       const botMsg = { id: Date.now() + 1, sender: 'saathi', text: replyText };
       setMessages(prev => [...prev, botMsg]);
+      
+      // Auto read-aloud AI response
       speakText(replyText.replace(/[*#📌]/g, ''));
     } catch (err) {
       console.error(err);
@@ -157,14 +198,20 @@ export default function SaathiChatbot({ isFullPage = false }) {
             </div>
             <div>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Learning Studio</h3>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Multilingual AI Companion with automatic voice readout & interactive learning modes.</p>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Elaborated exam-oriented tutor with continuous hands-free voice mode.</p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            {isMicActive && (
+              <span className="badge-emerald" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <Radio size={12} className="recording-pulse" /> Hands-Free Mic Active
+              </span>
+            )}
+
             {isSpeaking && (
               <button onClick={stopSpeaking} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
-                <VolumeX size={16} /> Stop Audio
+                <VolumeX size={16} /> Stop Voice
               </button>
             )}
             <button onClick={clearChat} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
@@ -197,13 +244,14 @@ export default function SaathiChatbot({ isFullPage = false }) {
               key={msg.id}
               style={{
                 alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                maxWidth: '80%',
+                maxWidth: '85%',
                 padding: '1rem 1.25rem',
                 borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
                 background: msg.sender === 'user' ? 'var(--accent-primary)' : '#0b0f19',
                 color: '#ffffff',
                 fontSize: '1rem',
-                lineHeight: 1.6,
+                lineHeight: 1.65,
+                whiteSpace: 'pre-line',
                 border: msg.sender === 'saathi' ? '2px solid var(--border-color)' : 'none',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
               }}
@@ -215,7 +263,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
           {loading && (
             <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <RefreshCw size={14} className="spin" /> Saathi AI is thinking & preparing voice narration...
+              <RefreshCw size={14} className="spin" /> Saathi AI is generating exam-oriented answer & voice...
             </div>
           )}
 
@@ -232,20 +280,20 @@ export default function SaathiChatbot({ isFullPage = false }) {
             onClick={toggleVoiceInput}
             className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
             style={{ padding: '0.75rem', borderRadius: '14px', color: isMicActive ? 'var(--accent-danger)' : '#ffffff' }}
-            title="Speak your question"
+            title="Toggle Continuous Hands-Free Voice Conversation"
           >
             {isMicActive ? <MicOff size={20} color="var(--accent-danger)" /> : <Mic size={20} />}
           </button>
 
           <input 
             type="text"
-            placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
+            placeholder={isMicActive ? "Hands-Free Mic Active... Speak anytime!" : "Ask Saathi AI any study question..."}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             style={{
               flex: 1,
               background: 'rgba(255, 255, 255, 0.08)',
-              border: isMicActive ? '2px solid var(--accent-danger)' : '1px solid var(--border-color)',
+              border: isMicActive ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)',
               borderRadius: '14px',
               padding: '0.75rem 1.1rem',
               color: '#ffffff',
@@ -299,8 +347,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
             position: 'fixed',
             bottom: '24px',
             right: '24px',
-            width: isExpanded ? '500px' : '380px',
-            height: isExpanded ? '650px' : '520px',
+            width: isExpanded ? '520px' : '390px',
+            height: isExpanded ? '660px' : '540px',
             maxHeight: '85vh',
             borderRadius: '24px',
             display: 'flex',
@@ -320,7 +368,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
               </div>
               <div>
                 <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Studio</h4>
-                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Voice & Multilingual Tutor</span>
+                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Hands-Free Voice & Exam Tutor</span>
               </div>
             </div>
 
@@ -356,13 +404,14 @@ export default function SaathiChatbot({ isFullPage = false }) {
                 key={msg.id}
                 style={{
                   alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                  maxWidth: '85%',
+                  maxWidth: '88%',
                   padding: '0.75rem 1rem',
                   borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
                   background: msg.sender === 'user' ? 'var(--accent-primary)' : '#0b0f19',
                   color: '#ffffff',
                   fontSize: '0.9rem',
-                  lineHeight: 1.5,
+                  lineHeight: 1.6,
+                  whiteSpace: 'pre-line',
                   border: msg.sender === 'saathi' ? '1px solid var(--border-color)' : 'none'
                 }}
               >
@@ -389,20 +438,20 @@ export default function SaathiChatbot({ isFullPage = false }) {
               onClick={toggleVoiceInput}
               className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
               style={{ padding: '0.55rem', borderRadius: '12px' }}
-              title="Speak your question"
+              title="Toggle Continuous Hands-Free Voice Mode"
             >
               {isMicActive ? <MicOff size={16} color="var(--accent-danger)" /> : <Mic size={16} />}
             </button>
 
             <input 
               type="text"
-              placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
+              placeholder={isMicActive ? "Hands-free mic listening..." : "Ask Saathi AI any study question..."}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{
                 flex: 1,
                 background: 'rgba(255, 255, 255, 0.08)',
-                border: isMicActive ? '2px solid var(--accent-danger)' : '1px solid var(--border-color)',
+                border: isMicActive ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)',
                 borderRadius: '12px',
                 padding: '0.55rem 0.85rem',
                 color: '#ffffff',

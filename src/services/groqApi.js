@@ -1,6 +1,6 @@
 /**
  * High-Speed Zero-Latency Groq API Service for Saathi Accessibility Copilot
- * Features High-Contrast Canvas Pre-Processing for Handwritten & Online Digital Text Recognition.
+ * Features Anti-Hallucination OCR + Exam-Oriented Academic Chatbot Engine.
  */
 
 import Tesseract from 'tesseract.js';
@@ -15,7 +15,7 @@ export const setGroqApiKey = (key) => {
 };
 
 /**
- * High-Contrast Canvas Pre-Processor: Optimizes images for Handwritten Notes & Online Text
+ * Fast helper: Downscale image for fast OCR parsing
  */
 export function compressImageBase64(imageSrc, maxWidth = 900, maxHeight = 900, enhanceHandwriting = true) {
   return new Promise((resolve) => {
@@ -46,16 +46,15 @@ export function compressImageBase64(imageSrc, maxWidth = 900, maxHeight = 900, e
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Contrast enhancement for handwriting & low-light photos
       if (enhanceHandwriting) {
         const imageData = ctx.getImageData(0, 0, width, height);
         const data = imageData.data;
-        const factor = (259 * (128 + 255)) / (255 * (259 - 128)); // Moderate contrast boost
+        const factor = (259 * (128 + 255)) / (255 * (259 - 128));
 
         for (let i = 0; i < data.length; i += 4) {
-          data[i] = factor * (data[i] - 128) + 128;     // Red
-          data[i + 1] = factor * (data[i + 1] - 128) + 128; // Green
-          data[i + 2] = factor * (data[i + 2] - 128) + 128; // Blue
+          data[i] = factor * (data[i] - 128) + 128;
+          data[i + 1] = factor * (data[i + 1] - 128) + 128;
+          data[i + 2] = factor * (data[i + 2] - 128) + 128;
         }
         ctx.putImageData(imageData, 0, 0);
       }
@@ -101,7 +100,7 @@ export async function extractTextWithOCR(imageSrc, isHandwritten = false) {
 /**
  * High-Speed Groq API caller (Timeout 4s limit)
  */
-async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 450) {
+async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 550) {
   const apiKey = getGroqApiKey();
 
   if (!apiKey || apiKey === 'gsk_your_groq_api_key_here') {
@@ -143,14 +142,13 @@ async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 450) 
 }
 
 /**
- * Universal Vision AI Engine: Supports Handwritten Notes, Online Text, and Printed Docs
+ * Universal Vision AI Engine
  */
 export async function describeImageWithGroq(imageInput, userPrompt = "Describe this image", imageName = "uploaded_image", recognitionMode = "auto") {
   const apiKey = getGroqApiKey();
   const cleanName = imageName.replace(/[-_]/g, ' ').replace(/\.[^/.]+$/, "");
   const isHandwritten = recognitionMode === 'handwritten' || cleanName.toLowerCase().includes('handwritten') || cleanName.toLowerCase().includes('notes');
 
-  // Perform OCR extraction with handwriting pre-processor
   let extractedOCRText = "";
   try {
     extractedOCRText = await extractTextWithOCR(imageInput, isHandwritten);
@@ -226,7 +224,7 @@ Instructions:
 }
 
 /**
- * Cognitive Simplifier: Fast 150ms text simplification
+ * Cognitive Simplifier: Fast text simplification
  */
 export async function simplifyTextWithGroq(sourceText, readingLevel = 'elementary', targetLanguage = 'en', strictMode = true) {
   const levelDescriptions = {
@@ -259,23 +257,15 @@ ${strictMode ? "STRICT GROUNDING: Rely ONLY on facts stated in source text." : "
   const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.1, 500);
   if (result70b) return result70b;
 
-  if (targetLanguage === 'hi') {
-    return `📌 **सरलीकृत मुख्य बिंदु (5वीं कक्षा स्तर)**:
-• यह अध्याय विद्युत धारा (Electric Current) और प्रतिरोध (Resistor) के बारे में है।
-• इलेक्ट्रॉन तारों के माध्यम से बहते हैं जिससे बिजली बनती है।
-• रोकने वाला उपकरण (Resistor) बिजली के तेज बहाव को नियंत्रित करता है ताकि उपकरण न जले।
-• **मुख्य सूत्र**: V = I × R (ओहम का नियम)।`;
-  }
   return `📌 **Simplified Summary (${readingLevel.toUpperCase()} LEVEL)**:
 
-• **Main Concept**: This text explains how electric current flows through a wire controlled by a resistor.
-• **Key Analogy**: Imagine water flowing in a pipe; the resistor acts like a valve controlling water pressure.
-• **Core Rule (Ohm's Law)**: Voltage (V) equals Current (I) multiplied by Resistance (R).
-• **Action Point**: Always match resistor values to battery voltage to avoid overheating circuit components.`;
+• **Main Concept**: This text explains core principles clearly.
+• **Key Takeaway**: Focus on primary definitions and core rules.
+• **Action Point**: Review key formulas and practice problems.`;
 }
 
 /**
- * LaTeX & Math Reader: Translate LaTeX into natural spoken English
+ * LaTeX & Math Reader
  */
 export async function convertLatexToSpokenEnglish(latexString) {
   const prompt = `Convert LaTeX to clear natural spoken English for a screen reader. Also 3 symbol breakdown steps.
@@ -300,17 +290,22 @@ Return valid JSON with keys: "spokenText" and "breakdown" (array of strings).`;
     breakdown: [
       "1. Symbol: \\int_{0}^{\\infty} -> Integral starting from 0 extending to infinity",
       "2. Function: e^{-x^2} -> Exponential function with negative x squared",
-      "3. Integration variable: dx -> Integrated with respect to variable x",
-      "4. Result: \\frac{\\sqrt{\\pi}}{2} -> Half of the square root of Pi (Gaussian Integral result)"
+      "3. Result: \\frac{\\sqrt{\\pi}}{2} -> Half of the square root of Pi"
     ]
   };
 }
 
 /**
- * Saathi AI Assistant Chatbot
+ * Saathi AI Assistant Chatbot (Elaborated Exam-Oriented Tutor Engine)
  */
 export async function askSaathiAssistant(userMessage, chatHistory = [], profileContext = {}) {
-  const systemPrompt = `You are Saathi, an empathetic AI Accessibility Copilot. Be concise (max 2 sentences).`;
+  const systemPrompt = `You are Saathi, an empathetic, highly intelligent AI Accessibility Copilot and University Exam Specialist.
+GOAL: Provide elaborated, high-scoring, exam-oriented academic answers for university students.
+
+FORMATTING REQUIREMENTS:
+1. Always structure answers with clear **Key Points**, **Bold Terminology**, and **Bullet Points**.
+2. Include an **Exam Definition**, **Core Mechanics / Formula**, and a **Quick Memory Mnemonic or Summary**.
+3. Keep it visually engaging, clear for screen readers, and easy to read during exams!`;
 
   const messages = [
     { role: "system", content: systemPrompt },
@@ -318,18 +313,20 @@ export async function askSaathiAssistant(userMessage, chatHistory = [], profileC
     { role: "user", content: userMessage }
   ];
 
-  const result = await callGroqApi("llama-3.1-8b-instant", messages, 0.2, 300);
-  if (result) return result;
+  const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.2, 600);
+  if (result70b && result70b.trim()) return result70b;
+
+  const result8b = await callGroqApi("llama-3.1-8b-instant", messages, 0.2, 500);
+  if (result8b && result8b.trim()) return result8b;
 
   const lower = userMessage.toLowerCase();
-  if (lower.includes("camera") || lower.includes("vision") || lower.includes("see") || lower.includes("describe")) {
-    return "You can use the **Vision Assist** tool in the dashboard! Click 'Describe This Camera Mode' to point your camera at any blackboard, textbook, or circuit diagram, and I will read it aloud to you.";
-  }
-  if (lower.includes("pdf") || lower.includes("simplify") || lower.includes("read")) {
-    return "To simplify dense textbooks or lab manuals, switch to the **Cognitive Simplifier** tab in your dashboard. You can select your reading level (5th Grade, High School, or Audio Bullet Points) and even translate to Hindi!";
-  }
-  if (lower.includes("caption") || lower.includes("lecture") || lower.includes("hear")) {
-    return "For live lectures, activate **Live Lecture Captioning**. It provides real-time high-contrast scrolling subtitles and live translation so hearing-impaired students never miss a single word!";
-  }
-  return `Hello! I am Saathi, your AI Accessibility Companion. How can I assist your learning today?`;
+  return `📌 **Exam-Oriented Explanation for "${userMessage}"**:
+
+• **Core Definition**: This concept is a fundamental topic in university curriculum covering key operating principles.
+• **Key Mechanisms & Components**:
+  - **Component 1**: Primary signal or data flow input.
+  - **Component 2**: Processing logic or control element.
+  - **Component 3**: Output response or target state.
+• **Formula / Core Rule**: Verify parameters against standard course equations.
+• **Exam Tip**: Remember key definitions and label all diagram components clearly during your exam!`;
 }
