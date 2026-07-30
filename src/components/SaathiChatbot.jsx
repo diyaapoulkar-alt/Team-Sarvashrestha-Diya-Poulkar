@@ -9,11 +9,13 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const [isExpanded, setIsExpanded] = useState(isFullPage);
   const [isMicActive, setIsMicActive] = useState(false);
 
+  const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am Saathi, your interactive Multimodal AI Study Copilot. Ask me anything, or try one of the fun learning modes below!';
+
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'saathi',
-      text: 'Namaste! I am Saathi, your interactive ChatGPT Study Companion. Ask me anything, or try one of the fun learning modes below!'
+      text: greetingText
     }
   ]);
   const [inputText, setInputText] = useState('');
@@ -124,7 +126,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
     stopSpeaking();
   };
 
-  // If full-page view inside dashboard tab
+  // Full-page Studio View inside dashboard tab
   if (isFullPage) {
     return (
       <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '620px' }}>
@@ -136,8 +138,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
               <Sparkles size={22} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>ChatGPT Study Companion</h3>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Interactive AI Tutor with automatic voice readout & fun learning modes.</p>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Learning Studio</h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Multilingual AI Companion with automatic voice readout & interactive learning modes.</p>
             </div>
           </div>
 
@@ -195,7 +197,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
           {loading && (
             <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <RefreshCw size={14} className="spin" /> ChatGPT is thinking & preparing voice narration...
+              <RefreshCw size={14} className="spin" /> Saathi AI is thinking & preparing voice narration...
             </div>
           )}
 
@@ -219,7 +221,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
           <input 
             type="text"
-            placeholder="Ask ChatGPT any study question..."
+            placeholder="Ask Saathi AI any study question..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             style={{
@@ -265,7 +267,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
             boxShadow: '0 8px 32px rgba(99, 102, 241, 0.5)',
             zIndex: 99
           }}
-          title="Ask ChatGPT AI Companion"
+          title="Ask Saathi AI Companion"
         >
           <Sparkles size={28} />
         </button>
@@ -299,8 +301,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
                 <Sparkles size={20} />
               </div>
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>ChatGPT Companion</h4>
-                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Voice & Interactive Tutor</span>
+                <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Studio</h4>
+                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Voice & Multilingual Tutor</span>
               </div>
             </div>
 
@@ -352,7 +354,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             {loading && (
               <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.85rem' }}>
-                ChatGPT is generating answer...
+                Saathi AI is generating answer...
               </div>
             )}
 
@@ -376,7 +378,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             <input 
               type="text"
-              placeholder="Ask ChatGPT any study question..."
+              placeholder="Ask Saathi AI any study question..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{

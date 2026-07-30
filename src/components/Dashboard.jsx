@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, Mic, Brain, Calculator, Sparkles, MessageSquare, ShieldCheck } from 'lucide-react';
+import { Camera, Mic, Brain, Calculator, Sparkles, ShieldCheck } from 'lucide-react';
 import VisionAssist from './tools/VisionAssist';
 import LectureCaptioner from './tools/LectureCaptioner';
 import CognitiveSimplifier from './tools/CognitiveSimplifier';
@@ -116,7 +116,7 @@ export default function Dashboard() {
               <Sparkles size={20} color="#c084fc" />
             </div>
             <div>
-              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>ChatGPT Tutor</strong>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Saathi AI Studio</strong>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Voice AI & Pop Quizzes</span>
             </div>
           </div>
