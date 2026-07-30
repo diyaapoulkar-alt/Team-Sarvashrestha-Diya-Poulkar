@@ -1,19 +1,19 @@
 /* 
-  Saathi Accessibility Copilot AI - Premium Glassmorphism & Grey Background Design System
+  Saathi Accessibility Copilot AI - Visible Medium Slate Grey Design System
   Features Arial Rounded MT Bold Font for Headings & Bold Typography + Smooth Animations
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=OpenDyslexic:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@700;900&display=swap');
 
 :root {
-  --bg-primary: #111827; /* Clean Dark Grey Background */
-  --bg-surface: #1f2937; /* Slate Surface */
-  --bg-card: rgba(30, 41, 59, 0.75); /* Dark Glass Card */
-  --border-color: rgba(255, 255, 255, 0.12); /* Subtle Border */
+  --bg-primary: #28303f; /* Distinct Visible Mid-Dark Slate Grey */
+  --bg-surface: #1e293b; /* Deep Slate Surface */
+  --bg-card: rgba(15, 23, 42, 0.85); /* Smooth Dark Glass Card */
+  --border-color: rgba(255, 255, 255, 0.16); /* Subtle Border */
   
   --text-primary: #ffffff !important;
-  --text-secondary: #e2e8f0;
-  --text-muted: #94a3b8;
+  --text-secondary: #f1f5f9;
+  --text-muted: #cbd5e1;
   
   --accent-primary: #6366f1; /* Vibrant Indigo */
   --accent-secondary: #a855f7; /* Vibrant Purple */
@@ -61,11 +61,12 @@
   padding: 0;
 }
 
-body {
-  background-color: var(--bg-primary);
+html, body, #root {
+  background-color: var(--bg-primary) !important;
   color: #ffffff !important;
   font-family: var(--font-family-sans);
   line-height: 1.6;
+  min-height: 100vh;
   overflow-x: hidden;
 }
 
