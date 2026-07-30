@@ -23,6 +23,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
   const chatEndRef = useRef(null);
   const recognitionRef = useRef(null);
+  const lastSpokenRef = useRef('');
 
   useEffect(() => {
     if (isOpen || isFullPage) {
@@ -30,7 +31,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
     }
   }, [messages, isOpen, isFullPage]);
 
-  // Voice Input Speech Recognition Setup
+  // Reliable Microphone Input Stream Handler
   const toggleVoiceInput = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -45,26 +46,43 @@ export default function SaathiChatbot({ isFullPage = false }) {
       }
     } else {
       try {
+        lastSpokenRef.current = '';
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = true;
         recognition.lang = 'en-US';
 
         recognition.onstart = () => setIsMicActive(true);
+
         recognition.onresult = (event) => {
-          const spoken = event.results[0][0].transcript;
-          setInputText(spoken);
-          if (event.results[0].isFinal) {
-            setIsMicActive(false);
-            sendMessage(spoken);
+          let currentText = '';
+          for (let i = 0; i < event.results.length; ++i) {
+            currentText += event.results[i][0].transcript;
+          }
+          if (currentText.trim()) {
+            lastSpokenRef.current = currentText.trim();
+            setInputText(currentText.trim());
           }
         };
-        recognition.onerror = () => setIsMicActive(false);
-        recognition.onend = () => setIsMicActive(false);
+
+        recognition.onerror = (err) => {
+          console.warn("Chatbot mic notice:", err);
+          setIsMicActive(false);
+        };
+
+        recognition.onend = () => {
+          setIsMicActive(false);
+          if (lastSpokenRef.current && lastSpokenRef.current.trim()) {
+            const queryToSend = lastSpokenRef.current.trim();
+            lastSpokenRef.current = '';
+            sendMessage(queryToSend);
+          }
+        };
 
         recognitionRef.current = recognition;
         recognition.start();
       } catch (e) {
+        console.error("Mic start error:", e);
         setIsMicActive(false);
       }
     }
@@ -96,15 +114,15 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
   const sendMessage = async (textToSend) => {
     const query = textToSend || inputText;
-    if (!query.trim() || loading) return;
+    if (!query || !query.trim() || loading) return;
 
-    const userMsg = { id: Date.now(), sender: 'user', text: query };
+    const userMsg = { id: Date.now(), sender: 'user', text: query.trim() };
     setMessages(prev => [...prev, userMsg]);
-    if (!textToSend) setInputText('');
+    setInputText('');
     setLoading(true);
 
     try {
-      const replyText = await askSaathiAssistant(query, messages);
+      const replyText = await askSaathiAssistant(query.trim(), messages);
       const botMsg = { id: Date.now() + 1, sender: 'saathi', text: replyText };
       setMessages(prev => [...prev, botMsg]);
       speakText(replyText.replace(/[*#📌]/g, ''));
@@ -221,13 +239,13 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
           <input 
             type="text"
-            placeholder="Ask Saathi AI any study question..."
+            placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             style={{
               flex: 1,
               background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid var(--border-color)',
+              border: isMicActive ? '2px solid var(--accent-danger)' : '1px solid var(--border-color)',
               borderRadius: '14px',
               padding: '0.75rem 1.1rem',
               color: '#ffffff',
@@ -378,13 +396,13 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             <input 
               type="text"
-              placeholder="Ask Saathi AI any study question..."
+              placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{
                 flex: 1,
                 background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid var(--border-color)',
+                border: isMicActive ? '2px solid var(--accent-danger)' : '1px solid var(--border-color)',
                 borderRadius: '12px',
                 padding: '0.55rem 0.85rem',
                 color: '#ffffff',
