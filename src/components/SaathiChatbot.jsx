@@ -36,6 +36,77 @@ export default function SaathiChatbot({ isFullPage = false }) {
     }
   }, [messages, isOpen, isFullPage]);
 
+  // Rich Markdown & Bullet Point Renderer for Chatbot Messages
+  const renderFormattedMessage = (text) => {
+    if (!text) return null;
+
+    // Split text into lines
+    const lines = text.split('\n');
+    const elements = [];
+
+    lines.forEach((line, index) => {
+      let trimmed = line.trim();
+
+      if (!trimmed) {
+        elements.push(<div key={`br-${index}`} style={{ height: '0.4rem' }} />);
+        return;
+      }
+
+      // Format bold text **word** inside line
+      const parts = trimmed.split(/(\*\*.*?\*\*)/g);
+      const lineContent = parts.map((part, pIdx) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return (
+            <strong key={pIdx} style={{ color: 'var(--accent-cyan)', fontWeight: 800 }}>
+              {part.slice(2, -2)}
+            </strong>
+          );
+        }
+        return part;
+      });
+
+      // Heading detection (**Title:** or # Title)
+      if (trimmed.startsWith('**') && (trimmed.endsWith(':**') || trimmed.endsWith('**'))) {
+        elements.push(
+          <div key={index} style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', marginTop: '0.6rem', marginBottom: '0.3rem' }}>
+            {lineContent}
+          </div>
+        );
+      }
+      // Bullet list items (* item or + subitem or - item)
+      else if (trimmed.startsWith('* ') || trimmed.startsWith('+ ') || trimmed.startsWith('- ')) {
+        const bulletText = trimmed.substring(2);
+        const bulletParts = bulletText.split(/(\*\*.*?\*\*)/g).map((part, pIdx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return (
+              <strong key={pIdx} style={{ color: '#67e8f9', fontWeight: 800 }}>
+                {part.slice(2, -2)}
+              </strong>
+            );
+          }
+          return part;
+        });
+
+        elements.push(
+          <div key={index} style={{ display: 'flex', gap: '0.5rem', marginLeft: trimmed.startsWith('+ ') ? '1.25rem' : '0.4rem', marginTop: '0.2rem' }}>
+            <span style={{ color: 'var(--accent-primary)', fontWeight: 800 }}>•</span>
+            <span style={{ flex: 1 }}>{bulletParts}</span>
+          </div>
+        );
+      }
+      // Standard paragraph
+      else {
+        elements.push(
+          <p key={index} style={{ marginBottom: '0.35rem', lineHeight: 1.6 }}>
+            {lineContent}
+          </p>
+        );
+      }
+    });
+
+    return elements;
+  };
+
   // Academic Phonetic Auto-Corrector for Mic Input Accuracy
   const fastCorrect = (text) => {
     if (!text) return '';
@@ -200,7 +271,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
   // Full-page Studio View inside dashboard tab
   if (isFullPage) {
     return (
-      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '620px' }}>
+      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '640px' }}>
         
         {/* Header Bar */}
         <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
@@ -210,7 +281,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
             </div>
             <div>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Learning Studio</h3>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Elaborated exam-oriented tutor with zero-latency voice mode.</p>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Elaborated exam-oriented tutor with formatted bullet notes.</p>
             </div>
           </div>
 
@@ -256,20 +327,19 @@ export default function SaathiChatbot({ isFullPage = false }) {
               key={msg.id}
               style={{
                 alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                maxWidth: '85%',
+                maxWidth: '88%',
                 padding: '1rem 1.25rem',
                 borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
                 background: msg.sender === 'user' ? 'var(--accent-primary)' : '#0b0f19',
                 color: '#ffffff',
-                fontSize: '1rem',
-                lineHeight: 1.65,
-                whiteSpace: 'pre-line',
+                fontSize: '0.98rem',
+                lineHeight: 1.6,
                 border: msg.sender === 'saathi' ? '2px solid var(--border-color)' : 'none',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
               }}
               className="animate-pop"
             >
-              {msg.text}
+              {renderFormattedMessage(msg.text)}
             </div>
           ))}
 
@@ -359,8 +429,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
             position: 'fixed',
             bottom: '24px',
             right: '24px',
-            width: isExpanded ? '520px' : '390px',
-            height: isExpanded ? '660px' : '540px',
+            width: isExpanded ? '540px' : '400px',
+            height: isExpanded ? '670px' : '550px',
             maxHeight: '85vh',
             borderRadius: '24px',
             display: 'flex',
@@ -416,18 +486,17 @@ export default function SaathiChatbot({ isFullPage = false }) {
                 key={msg.id}
                 style={{
                   alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                  maxWidth: '88%',
+                  maxWidth: '90%',
                   padding: '0.75rem 1rem',
                   borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
                   background: msg.sender === 'user' ? 'var(--accent-primary)' : '#0b0f19',
                   color: '#ffffff',
-                  fontSize: '0.9rem',
+                  fontSize: '0.92rem',
                   lineHeight: 1.6,
-                  whiteSpace: 'pre-line',
                   border: msg.sender === 'saathi' ? '1px solid var(--border-color)' : 'none'
                 }}
               >
-                {msg.text}
+                {renderFormattedMessage(msg.text)}
               </div>
             ))}
 
