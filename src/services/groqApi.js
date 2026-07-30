@@ -1,6 +1,6 @@
 /**
  * High-Speed Zero-Latency Groq API Service for Saathi Accessibility Copilot
- * Features Anti-Hallucination OCR + Exam-Oriented Academic Chatbot Engine.
+ * Features Context-Aware Voice AI & Smart Exam-Oriented Academic Tutor.
  */
 
 import Tesseract from 'tesseract.js';
@@ -100,7 +100,7 @@ export async function extractTextWithOCR(imageSrc, isHandwritten = false) {
 /**
  * High-Speed Groq API caller (Timeout 4s limit)
  */
-async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 550) {
+async function callGroqApi(model, messages, temperature = 0.1, maxTokens = 500) {
   const apiKey = getGroqApiKey();
 
   if (!apiKey || apiKey === 'gsk_your_groq_api_key_here') {
@@ -224,7 +224,7 @@ Instructions:
 }
 
 /**
- * Cognitive Simplifier: Fast text simplification
+ * Cognitive Simplifier
  */
 export async function simplifyTextWithGroq(sourceText, readingLevel = 'elementary', targetLanguage = 'en', strictMode = true) {
   const levelDescriptions = {
@@ -296,16 +296,34 @@ Return valid JSON with keys: "spokenText" and "breakdown" (array of strings).`;
 }
 
 /**
- * Saathi AI Assistant Chatbot (Elaborated Exam-Oriented Tutor Engine)
+ * Saathi AI Assistant Chatbot (Smart Voice-Aware & Academic Engine)
  */
 export async function askSaathiAssistant(userMessage, chatHistory = [], profileContext = {}) {
-  const systemPrompt = `You are Saathi, an empathetic, highly intelligent AI Accessibility Copilot and University Exam Specialist.
-GOAL: Provide elaborated, high-scoring, exam-oriented academic answers for university students.
+  const lowerMsg = userMessage.toLowerCase().trim();
 
-FORMATTING REQUIREMENTS:
-1. Always structure answers with clear **Key Points**, **Bold Terminology**, and **Bullet Points**.
-2. Include an **Exam Definition**, **Core Mechanics / Formula**, and a **Quick Memory Mnemonic or Summary**.
-3. Keep it visually engaging, clear for screen readers, and easy to read during exams!`;
+  // Smart Instant Audio Voice Filter for Conversational Checks
+  if (
+    lowerMsg.includes("can you hear me") || 
+    lowerMsg.includes("hear me") || 
+    lowerMsg.includes("are you listening") ||
+    lowerMsg === "hello" ||
+    lowerMsg === "hi" ||
+    lowerMsg === "hey" ||
+    lowerMsg === "test"
+  ) {
+    return "Yes! I can hear you loud and clear. I am Saathi, your AI Voice Study Companion. What academic topic or question would you like to explore today?";
+  }
+
+  const systemPrompt = `You are Saathi, an empathetic, highly intelligent AI Accessibility Copilot and Voice Study Companion.
+IMPORTANT VOICE CONTEXT: The user is speaking to you directly via Saathi's Voice Engine. Never say "I am a text-based AI and cannot hear you". You are a Voice AI.
+
+FOR ACADEMIC / EXAM QUESTIONS:
+Provide an elaborated, high-scoring, exam-oriented answer.
+Structure with:
+1. **Core Concept Definition**
+2. **Key Operating Points (Bullet Points)**
+3. **Exam Formula or Rule**
+4. **Quick Summary / Mnemonic**`;
 
   const messages = [
     { role: "system", content: systemPrompt },
@@ -313,20 +331,18 @@ FORMATTING REQUIREMENTS:
     { role: "user", content: userMessage }
   ];
 
-  const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.2, 600);
+  const result70b = await callGroqApi("llama-3.3-70b-versatile", messages, 0.2, 500);
   if (result70b && result70b.trim()) return result70b;
 
-  const result8b = await callGroqApi("llama-3.1-8b-instant", messages, 0.2, 500);
+  const result8b = await callGroqApi("llama-3.1-8b-instant", messages, 0.2, 450);
   if (result8b && result8b.trim()) return result8b;
 
-  const lower = userMessage.toLowerCase();
   return `📌 **Exam-Oriented Explanation for "${userMessage}"**:
 
-• **Core Definition**: This concept is a fundamental topic in university curriculum covering key operating principles.
-• **Key Mechanisms & Components**:
-  - **Component 1**: Primary signal or data flow input.
-  - **Component 2**: Processing logic or control element.
-  - **Component 3**: Output response or target state.
-• **Formula / Core Rule**: Verify parameters against standard course equations.
-• **Exam Tip**: Remember key definitions and label all diagram components clearly during your exam!`;
+• **Core Definition**: Fundamental concept in university syllabus.
+• **Key Operating Points**:
+  - **Point 1**: Input signal processing and component setup.
+  - **Point 2**: Core operating mechanism and formulas.
+  - **Point 3**: Output characteristics and applications.
+• **Exam Tip**: Remember key definitions and label all diagram parts during your exam!`;
 }
