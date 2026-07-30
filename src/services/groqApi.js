@@ -32,7 +32,7 @@ export function compressImageBase64(imageSrc, maxWidth = 900, maxHeight = 900, e
 
       if (width > maxWidth || height > maxHeight) {
         if (width > height) {
-          height = Math.round((height * maxWidth) / width);
+          height = Math.round((height * maxHeight) / width);
           width = maxWidth;
         } else {
           width = Math.round((width * maxHeight) / height);
@@ -301,6 +301,18 @@ Return valid JSON with keys: "spokenText" and "breakdown" (array of strings).`;
 export async function askSaathiAssistant(userMessage, chatHistory = [], profileContext = {}) {
   const lowerMsg = userMessage.toLowerCase().trim();
 
+  // Instant Action Commands Filter (stop, pause, quiet, mute, cancel)
+  if (
+    lowerMsg === "stop" || 
+    lowerMsg === "pause" || 
+    lowerMsg === "quiet" || 
+    lowerMsg === "mute" || 
+    lowerMsg === "cancel" ||
+    lowerMsg === "stop speaking"
+  ) {
+    return "Voice readout stopped. I am ready for your next study question!";
+  }
+
   // Smart Instant Audio Voice Filter for Conversational Checks
   if (
     lowerMsg.includes("can you hear me") || 
@@ -309,7 +321,9 @@ export async function askSaathiAssistant(userMessage, chatHistory = [], profileC
     lowerMsg === "hello" ||
     lowerMsg === "hi" ||
     lowerMsg === "hey" ||
-    lowerMsg === "test"
+    lowerMsg === "test" ||
+    lowerMsg === "thanks" ||
+    lowerMsg === "thank you"
   ) {
     return "Yes! I can hear you loud and clear. I am Saathi, your AI Voice Study Companion. What academic topic or question would you like to explore today?";
   }

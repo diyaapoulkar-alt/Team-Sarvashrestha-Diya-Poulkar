@@ -153,15 +153,27 @@ export default function SaathiChatbot({ isFullPage = false }) {
     const query = textToSend || inputText;
     if (!query || !query.trim() || loading) return;
 
+    const trimmedQuery = query.trim();
+    const lower = trimmedQuery.toLowerCase();
+
+    // Instant Action Command Execution for "stop", "pause", "quiet", "mute", "cancel"
+    if (lower === "stop" || lower === "pause" || lower === "quiet" || lower === "mute" || lower === "cancel" || lower === "stop speaking") {
+      stopSpeaking(); // Immediately stop TTS speech audio
+      const stopMsg = { id: Date.now() + 1, sender: 'saathi', text: 'Voice readout stopped. I am ready for your next study question!' };
+      setMessages(prev => [...prev, { id: Date.now(), sender: 'user', text: trimmedQuery }, stopMsg]);
+      setInputText('');
+      return;
+    }
+
     stopSpeaking(); // Stop previous audio narration immediately
 
-    const userMsg = { id: Date.now(), sender: 'user', text: query.trim() };
+    const userMsg = { id: Date.now(), sender: 'user', text: trimmedQuery };
     setMessages(prev => [...prev, userMsg]);
     setInputText('');
     setLoading(true);
 
     try {
-      const replyText = await askSaathiAssistant(query.trim(), messages);
+      const replyText = await askSaathiAssistant(trimmedQuery, messages);
       const botMsg = { id: Date.now() + 1, sender: 'saathi', text: replyText };
       setMessages(prev => [...prev, botMsg]);
       
