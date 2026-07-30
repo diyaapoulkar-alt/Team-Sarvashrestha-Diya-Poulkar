@@ -39,18 +39,18 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
-      zIndex: 80,
+      zIndex: 110, // Higher than Navbar (zIndex: 90) so button is never covered or cut in half
       backdropFilter: 'blur(16px)',
       flexShrink: 0,
-      overflow: 'visible' // Ensure toggle arrow button is never clipped
+      overflow: 'visible'
     }}>
 
-      {/* Fully Visible Collapse / Expand Toggle Button */}
+      {/* 100% Fully Visible Toggle Arrow Button - Positioned Below Navbar */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'absolute',
-          top: '22px',
+          top: '85px', // Positioned below Navbar so it's 100% visible
           right: '-16px',
           width: '32px',
           height: '32px',
@@ -62,8 +62,8 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
-          zIndex: 100
+          boxShadow: '0 4px 16px rgba(0,0,0,0.6)',
+          zIndex: 999
         }}
         title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
       >
