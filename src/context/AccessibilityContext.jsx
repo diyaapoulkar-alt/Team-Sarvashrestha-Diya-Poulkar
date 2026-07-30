@@ -104,36 +104,32 @@ export const AccessibilityProvider = ({ children }) => {
     }
   };
 
-  // Ultra-fast mode preset switcher
+  // Mode preset switcher (keeps normal dark-glass color scheme for all modes!)
   const applyProfilePreset = (profileKey) => {
     setActiveProfile(profileKey);
+    setThemeMode('dark-glass'); // Keep normal theme without turning yellow
     
     if (profileKey === 'visual') {
       setActiveTool('vision');
-      setThemeMode('high-contrast-yellow');
-      setFontSize(18);
+      setFontSize(16);
       setScreenReaderAudio(true);
       speakText("Visual Assist.");
     } else if (profileKey === 'hearing') {
       setActiveTool('captioner');
-      setThemeMode('dark-glass');
       setFontSize(16);
       setScreenReaderAudio(false);
       speakText("Hearing Assist.");
     } else if (profileKey === 'cognitive') {
       setActiveTool('simplifier');
-      setThemeMode('solar-light');
-      setFontSize(18);
-      setUseOpenDyslexic(true);
+      setFontSize(16);
       setReadingLevel('elementary');
       speakText("Cognitive Assist.");
     } else if (profileKey === 'motor') {
       setActiveTool('latex');
-      setFontSize(18);
+      setFontSize(16);
       speakText("Motor Assist.");
     } else {
       setActiveTool('vision');
-      setThemeMode('dark-glass');
       setFontSize(16);
       setUseOpenDyslexic(false);
     }
