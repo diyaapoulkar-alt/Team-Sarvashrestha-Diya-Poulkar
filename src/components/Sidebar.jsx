@@ -1,9 +1,10 @@
 import React from 'react';
 import { 
   Eye, Ear, Brain, Accessibility, ChevronLeft, ChevronRight, 
-  Type, Sun, Moon, Volume2, Globe, Sparkles, BookOpen, Focus
+  Type, Globe, Sparkles, BookOpen, Focus
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
+import { getTranslation } from '../utils/translations';
 
 export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
   const { 
@@ -19,6 +20,8 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
     setReadingMaskActive
   } = useAccessibility();
 
+  const t = (key) => getTranslation(targetLanguage, key);
+
   const handleModeClick = (profileKey) => {
     applyProfilePreset(profileKey);
     if (onSelectMode) {
@@ -28,7 +31,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
 
   return (
     <aside style={{
-      width: isOpen ? '280px' : '72px',
+      width: isOpen ? '280px' : '76px',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       background: 'rgba(15, 23, 42, 0.95)',
       borderRight: '1px solid var(--border-color)',
@@ -37,31 +40,33 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
       position: 'relative',
       zIndex: 80,
       backdropFilter: 'blur(16px)',
-      flexShrink: 0
+      flexShrink: 0,
+      overflow: 'visible' // Ensure toggle arrow button is never clipped
     }}>
 
-      {/* Collapse / Expand Toggle Button */}
+      {/* Fully Visible Collapse / Expand Toggle Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'absolute',
-          top: '20px',
-          right: '-14px',
-          width: '28px',
-          height: '28px',
+          top: '22px',
+          right: '-16px',
+          width: '32px',
+          height: '32px',
           borderRadius: '50%',
           background: 'var(--accent-primary)',
           border: '2px solid #0f172a',
-          color: '#fff',
+          color: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-          zIndex: 10
+          boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
+          zIndex: 100
         }}
+        title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
       >
-        {isOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+        {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
       </button>
 
       {/* Sidebar Header */}
@@ -71,8 +76,12 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
         </div>
         {isOpen && (
           <div style={{ overflow: 'hidden' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap' }}>Accessibility Modes</h3>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', whiteSpace: 'nowrap' }}>Click to open tool</span>
+            <h3 style={{ fontSize: '0.98rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap' }}>
+              {t('accessibilityModes')}
+            </h3>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', whiteSpace: 'nowrap' }}>
+              {t('clickToOpenTool')}
+            </span>
           </div>
         )}
       </div>
@@ -82,7 +91,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
         
         {isOpen && (
           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '0.5rem', marginBottom: '0.2rem' }}>
-            Presets:
+            {t('presets')}
           </span>
         )}
 
@@ -102,12 +111,12 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             borderRadius: '12px',
             textAlign: 'left'
           }}
-          title="Visual Assist Mode - Opens Describe This Camera"
+          title="Visual Assist Mode"
         >
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Eye size={20} color="var(--accent-primary)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Visual Assist</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('visualAssist')}</span>}
         </button>
 
         {/* 2. Hearing Assist */}
@@ -126,12 +135,12 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             borderRadius: '12px',
             textAlign: 'left'
           }}
-          title="Hearing Assist Mode - Opens Live Subtitles"
+          title="Hearing Assist Mode"
         >
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Ear size={20} color="var(--accent-emerald)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Hearing Assist</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('hearingAssist')}</span>}
         </button>
 
         {/* 3. Cognitive / Dyslexia */}
@@ -150,12 +159,12 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             borderRadius: '12px',
             textAlign: 'left'
           }}
-          title="Cognitive Assist Mode - Opens Textbook Simplifier"
+          title="Cognitive Assist Mode"
         >
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Brain size={20} color="var(--accent-cyan)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Cognitive / Dyslexia</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('cognitiveDyslexia')}</span>}
         </button>
 
         {/* 4. Motor Assist */}
@@ -174,12 +183,12 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             borderRadius: '12px',
             textAlign: 'left'
           }}
-          title="Motor Assist Mode - Opens Math Reader"
+          title="Motor Assist Mode"
         >
           <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
             <Accessibility size={20} color="var(--accent-secondary)" />
           </div>
-          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>Motor Assist</span>}
+          {isOpen && <span style={{ fontWeight: 600, color: '#ffffff', whiteSpace: 'nowrap' }}>{t('motorAssist')}</span>}
         </button>
 
         {/* Quick Customization Controls */}
@@ -187,7 +196,9 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
           <>
             <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.75rem 0' }} />
 
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '0.5rem' }}>Quick Settings:</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '0.5rem' }}>
+              {t('quickSettings')}
+            </span>
 
             {/* Focus Reader Line Guide Toggle */}
             <button 
@@ -196,13 +207,13 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem', padding: '0.65rem 0.85rem', fontSize: '0.85rem', textAlign: 'left', width: '100%' }}
             >
               <Focus size={16} color="var(--accent-cyan)" />
-              <span>{readingMaskActive ? "Focus Line Guide (ON)" : "Focus Line Guide (OFF)"}</span>
+              <span>{readingMaskActive ? t('focusLineGuideOn') : t('focusLineGuideOff')}</span>
             </button>
 
             {/* Font Scaler */}
             <div style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
               <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <Type size={14} /> Text Size: {fontSize}px
+                <Type size={14} /> {t('textSize')}: {fontSize}px
               </label>
               <input 
                 type="range" 
@@ -221,13 +232,13 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem', padding: '0.65rem 0.85rem', fontSize: '0.85rem', textAlign: 'left', width: '100%' }}
             >
               <BookOpen size={16} />
-              <span>Dyslexia Font: {useOpenDyslexic ? 'ON' : 'OFF'}</span>
+              <span>{useOpenDyslexic ? t('dyslexiaFontOn') : t('dyslexiaFontOff')}</span>
             </button>
 
             {/* Language Selector */}
             <div style={{ padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
               <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <Globe size={14} /> Language:
+                <Globe size={14} /> {t('language')}:
               </label>
               <select 
                 value={targetLanguage}

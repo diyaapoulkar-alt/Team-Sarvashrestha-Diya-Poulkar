@@ -6,9 +6,12 @@ import CognitiveSimplifier from './tools/CognitiveSimplifier';
 import LatexMathReader from './tools/LatexMathReader';
 import SaathiChatbot from './SaathiChatbot';
 import { useAccessibility } from '../context/AccessibilityContext';
+import { getTranslation } from '../utils/translations';
 
 export default function Dashboard() {
   const { activeProfile, targetLanguage, groqKey, activeTool, setActiveTool } = useAccessibility();
+
+  const t = (key) => getTranslation(targetLanguage, key);
 
   return (
     <div className="animate-fade-up" style={{ width: '100%', maxWidth: '1400px', padding: '2rem 1.5rem 4rem 1.5rem' }}>
@@ -17,10 +20,10 @@ export default function Dashboard() {
       <div className="glass-panel animate-pop" style={{ padding: '1.5rem', borderRadius: '24px', marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-primary)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Saathi Assistive Operations Hub
+            {t('opsHub')}
           </span>
           <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginTop: '0.2rem', color: '#ffffff' }}>
-            Accessibility Copilot Dashboard
+            {t('dashTitle')}
           </h2>
         </div>
 
@@ -52,8 +55,8 @@ export default function Dashboard() {
               <Camera size={20} color="var(--accent-primary)" />
             </div>
             <div>
-              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Vision Assist</strong>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>"Describe This" Camera</span>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>{t('visionTitle')}</strong>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t('visionSub')}</span>
             </div>
           </div>
         </button>
@@ -68,8 +71,8 @@ export default function Dashboard() {
               <Mic size={20} color="var(--accent-emerald)" />
             </div>
             <div>
-              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Lecture Captioner</strong>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Live Subtitles & Stream</span>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>{t('captionTitle')}</strong>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t('captionSub')}</span>
             </div>
           </div>
         </button>
@@ -84,8 +87,8 @@ export default function Dashboard() {
               <Brain size={20} color="var(--accent-cyan)" />
             </div>
             <div>
-              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Textbook Simplifier</strong>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Cognitive PDF Summaries</span>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>{t('simplifierTitle')}</strong>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t('simplifierSub')}</span>
             </div>
           </div>
         </button>
@@ -100,8 +103,8 @@ export default function Dashboard() {
               <Calculator size={20} color="var(--accent-secondary)" />
             </div>
             <div>
-              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Math LaTeX Reader</strong>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Formula Speech Parser</span>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>{t('latexTitle')}</strong>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t('latexSub')}</span>
             </div>
           </div>
         </button>
@@ -116,8 +119,8 @@ export default function Dashboard() {
               <Sparkles size={20} color="#c084fc" />
             </div>
             <div>
-              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>Saathi AI Studio</strong>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Voice AI & Pop Quizzes</span>
+              <strong style={{ display: 'block', fontSize: '0.95rem', color: '#ffffff' }}>{t('studioTitle')}</strong>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t('studioSub')}</span>
             </div>
           </div>
         </button>
