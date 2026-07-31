@@ -1,11 +1,12 @@
 import React from 'react';
 import { 
   Eye, Ear, Brain, Accessibility, ChevronLeft, ChevronRight, 
-  Type, Globe, BookOpen, Focus
+  Type, Globe, BookOpen, Focus, Sparkles
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
 import SaathiLogoIcon from './SaathiLogoIcon';
+import LadyTutorAvatar from './LadyTutorAvatar';
 
 export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
   const { 
@@ -18,7 +19,9 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
     targetLanguage, 
     setTargetLanguage,
     readingMaskActive,
-    setReadingMaskActive
+    setReadingMaskActive,
+    setActiveTool,
+    activeTool
   } = useAccessibility();
 
   const t = (key) => getTranslation(targetLanguage, key);
@@ -30,11 +33,18 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
     }
   };
 
+  const handleStudioClick = () => {
+    setActiveTool('chatgpt');
+    if (onSelectMode) {
+      onSelectMode('dashboard');
+    }
+  };
+
   return (
     <aside style={{
       width: isOpen ? '280px' : '76px',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-      background: 'rgba(241, 245, 249, 0.96)', // Silver Light Grey
+      background: 'rgba(241, 245, 249, 0.96)',
       borderRight: '1px solid var(--border-color)',
       display: 'flex',
       flexDirection: 'column',
@@ -88,7 +98,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
         )}
       </div>
 
-      {/* Accessibility Presets List */}
+      {/* Accessibility Presets & Tools List */}
       <div style={{ padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1, overflowY: 'auto' }}>
         
         {isOpen && (
@@ -191,6 +201,30 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
             <Accessibility size={20} color="var(--accent-secondary)" />
           </div>
           {isOpen && <span style={{ fontWeight: 600, color: '#0f172a', whiteSpace: 'nowrap' }}>{t('motorAssist')}</span>}
+        </button>
+
+        {/* 5. NEW: Saathi AI Studio Button */}
+        <button
+          onClick={handleStudioClick}
+          className={`btn-secondary ${activeTool === 'chatgpt' ? 'glowing-border' : ''}`}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justify: isOpen ? 'flex-start' : 'center',
+            gap: '0.75rem',
+            padding: '0.75rem 0.85rem',
+            background: activeTool === 'chatgpt' ? 'rgba(236, 72, 153, 0.15)' : '#ffffff',
+            borderColor: activeTool === 'chatgpt' ? '#ec4899' : 'var(--border-color)',
+            width: '100%',
+            borderRadius: '12px',
+            textAlign: 'left'
+          }}
+          title="Saathi AI Studio 👩‍🏫"
+        >
+          <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+            <LadyTutorAvatar size={24} />
+          </div>
+          {isOpen && <span style={{ fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>{t('saathiAiStudio')}</span>}
         </button>
 
         {/* Quick Customization Controls */}

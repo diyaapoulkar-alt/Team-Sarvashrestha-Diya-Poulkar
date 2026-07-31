@@ -9,7 +9,7 @@ export const translations = {
     copilotBrand: "Saathi Copilot",
     tagline: "AI Accessibility Companion",
     dashboardTab: "Copilot Dashboard",
-    studioTab: "AI Voice Studio",
+    studioTab: "Saathi AI Studio",
 
     // Hero
     heroBadge: "Universally Accessible AI Education",
@@ -30,11 +30,12 @@ export const translations = {
     // Sidebar
     accessibilityModes: "Accessibility Modes",
     clickToOpenTool: "Click to open tool",
-    presets: "Presets:",
+    presets: "Presets & Tools:",
     visualAssist: "Visual Assist",
     hearingAssist: "Hearing Assist",
     cognitiveDyslexia: "Cognitive / Dyslexia",
     motorAssist: "Motor Assist",
+    saathiAiStudio: "Saathi AI Studio 👩‍🏫",
     quickSettings: "Quick Settings:",
     focusLineGuideOn: "Focus Line Guide (ON)",
     focusLineGuideOff: "Focus Line Guide (OFF)",
@@ -93,7 +94,7 @@ export const translations = {
     copilotBrand: "साथी कोपायलट",
     tagline: "एआई सुगमता साथी",
     dashboardTab: "कोपायलट डैशबोर्ड",
-    studioTab: "एआई वॉइस स्टूडियो",
+    studioTab: "साथी एआई स्टूडियो 👩‍🏫",
 
     // Hero
     heroBadge: "सार्वभौमिक रूप से सुलभ एआई शिक्षा",
@@ -114,11 +115,12 @@ export const translations = {
     // Sidebar
     accessibilityModes: "सुगमता मोड (Accessibility Modes)",
     clickToOpenTool: "टूल खोलने के लिए क्लिक करें",
-    presets: "प्रिसेट उपलब्ध:",
+    presets: "प्रिसेट और टूल:",
     visualAssist: "दृश्य सहायता (Visual Assist)",
     hearingAssist: "श्रवण सहायता (Hearing Assist)",
     cognitiveDyslexia: "संज्ञानात्मक सहायता (Cognitive)",
     motorAssist: "मोटर सहायता (Motor Assist)",
+    saathiAiStudio: "साथी एआई स्टूडियो 👩‍🏫",
     quickSettings: "त्वरित सेटिंग्स:",
     focusLineGuideOn: "फोकस लाइन गाइड (चालू)",
     focusLineGuideOff: "फोकस लाइन गाइड (बंद)",
@@ -138,7 +140,7 @@ export const translations = {
     simplifierSub: "संज्ञानात्मक पीडीएफ सारांश",
     latexTitle: "गणित LaTeX पाठक",
     latexSub: "सूत्र वाक् विश्लेषक",
-    studioTitle: "साथी एआई स्टूडियो",
+    studioTitle: "साथी एआई स्टूडियो 👩‍🏫",
     studioSub: "वॉइस एआई और क्विज़",
 
     // Vision Assist Tool
@@ -177,7 +179,7 @@ export const translations = {
     copilotBrand: "सारथी कोपायलट",
     tagline: "एआय सुलभता साथी",
     dashboardTab: "कोपायलट डॅशबोर्ड",
-    studioTab: "एआय व्हॉइस स्टुडिओ",
+    studioTab: "साथी एआय स्टुडिओ 👩‍🏫",
 
     // Hero
     heroBadge: "सर्वसमावेशक एआय शिक्षण",
@@ -198,11 +200,12 @@ export const translations = {
     // Sidebar
     accessibilityModes: "सुलभता मोड्स (Accessibility Modes)",
     clickToOpenTool: "टूल उघडण्यासाठी क्लिक करा",
-    presets: "प्रिसेट्स उपलब्ध:",
+    presets: "प्रिसेट्स आणि टूल:",
     visualAssist: "दृष्टी सहाय्य (Visual Assist)",
     hearingAssist: "श्रवण सहाय्य (Hearing Assist)",
     cognitiveDyslexia: "संज्ञानात्मक सहाय्य (Cognitive)",
     motorAssist: "मोटर सहाय्य (Motor Assist)",
+    saathiAiStudio: "साथी एआय स्टुडिओ 👩‍🏫",
     quickSettings: "जलद सेटिंग्ज:",
     focusLineGuideOn: "फोकस लाईन मार्गदर्शक (चालू)",
     focusLineGuideOff: "फोकस लाईन मार्गदर्शक (बंद)",
@@ -222,7 +225,7 @@ export const translations = {
     simplifierSub: "संज्ञानात्मक पीडीएफ सारांश",
     latexTitle: "गणित LaTeX वाचक",
     latexSub: "सूत्र भाषांतर वाचक",
-    studioTitle: "साथी एआय स्टुडिओ",
+    studioTitle: "साथी एआय स्टुडिओ 👩‍🏫",
     studioSub: "व्हॉइस एआय आणि प्रश्नमंजुषा",
 
     // Vision Assist Tool

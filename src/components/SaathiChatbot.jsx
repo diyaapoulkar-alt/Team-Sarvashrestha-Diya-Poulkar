@@ -3,6 +3,7 @@ import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, HelpCi
 import { askSaathiAssistant } from '../services/groqApi';
 import { useAccessibility } from '../context/AccessibilityContext';
 import SaathiLogoIcon from './SaathiLogoIcon';
+import LadyTutorAvatar from './LadyTutorAvatar';
 
 export default function SaathiChatbot({ isFullPage = false }) {
   const { speakText, isSpeaking, stopSpeaking } = useAccessibility();
@@ -56,7 +57,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
       const lineContent = parts.map((part, pIdx) => {
         if (part.startsWith('**') && part.endsWith('**')) {
           return (
-            <strong key={pIdx} style={{ color: 'var(--accent-cyan)', fontWeight: 800 }}>
+            <strong key={pIdx} style={{ color: '#0284c7', fontWeight: 800 }}>
               {part.slice(2, -2)}
             </strong>
           );
@@ -66,7 +67,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
       if (trimmed.startsWith('**') && (trimmed.endsWith(':**') || trimmed.endsWith('**'))) {
         elements.push(
-          <div key={index} style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', marginTop: '0.6rem', marginBottom: '0.3rem' }}>
+          <div key={index} style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', marginTop: '0.6rem', marginBottom: '0.3rem', fontFamily: 'var(--font-family-heading)' }}>
             {lineContent}
           </div>
         );
@@ -76,7 +77,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
         const bulletParts = bulletText.split(/(\*\*.*?\*\*)/g).map((part, pIdx) => {
           if (part.startsWith('**') && part.endsWith('**')) {
             return (
-              <strong key={pIdx} style={{ color: '#67e8f9', fontWeight: 800 }}>
+              <strong key={pIdx} style={{ color: '#0369a1', fontWeight: 800 }}>
                 {part.slice(2, -2)}
               </strong>
             );
@@ -86,7 +87,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
         elements.push(
           <div key={index} style={{ display: 'flex', gap: '0.5rem', marginLeft: trimmed.startsWith('+ ') ? '1.25rem' : '0.4rem', marginTop: '0.2rem' }}>
-            <span style={{ color: 'var(--accent-primary)', fontWeight: 800 }}>•</span>
+            <span style={{ color: '#0284c7', fontWeight: 800 }}>•</span>
             <span style={{ flex: 1 }}>{bulletParts}</span>
           </div>
         );
@@ -118,7 +119,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
     return c;
   };
 
-  // Continuous Hands-Free Voice Conversation Loop with Instant Audio Barge-In Interrupt
+  // Continuous Hands-Free Voice Conversation Loop
   const toggleVoiceInput = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -139,7 +140,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
   const startContinuousSpeech = (SpeechRecognition) => {
     try {
-      stopSpeaking(); // Stop AI voice immediately if user clicks mic
+      stopSpeaking();
       lastSpokenRef.current = '';
       
       const recognition = new SpeechRecognition();
@@ -153,7 +154,6 @@ export default function SaathiChatbot({ isFullPage = false }) {
       };
 
       recognition.onresult = (event) => {
-        // INSTANT AUDIO BARGE-IN: Stop AI speech if user starts speaking!
         stopSpeaking();
 
         let currentText = '';
@@ -264,17 +264,19 @@ export default function SaathiChatbot({ isFullPage = false }) {
   // Full-page Studio View inside dashboard tab
   if (isFullPage) {
     return (
-      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '640px' }}>
+      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '640px', background: '#ffffff', color: '#0f172a' }}>
         
-        {/* Header Bar */}
+        {/* Header Bar with Lady Tutor Avatar */}
         <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'rgba(30, 41, 59, 0.9)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(99,102,241,0.4)' }}>
-              <SaathiLogoIcon size={30} />
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <LadyTutorAvatar size={48} />
             <div>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Learning Studio</h3>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Elaborated exam-oriented tutor with formatted bullet notes.</p>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                Saathi AI Studio 👩‍🏫
+              </h3>
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Interactive Lady AI Tutor for academic explanations, pop quizzes, and exam prep.
+              </p>
             </div>
           </div>
 
@@ -305,9 +307,9 @@ export default function SaathiChatbot({ isFullPage = false }) {
                 key={idx}
                 onClick={() => sendMessage(chip.prompt)}
                 className="btn-secondary"
-                style={{ padding: '0.4rem 0.85rem', fontSize: '0.82rem', borderRadius: '12px', whiteSpace: 'nowrap', borderColor: 'rgba(99,102,241,0.3)' }}
+                style={{ padding: '0.45rem 0.85rem', fontSize: '0.82rem', borderRadius: '12px', whiteSpace: 'nowrap', background: '#f8fafc', borderColor: 'var(--border-color)', color: '#0f172a' }}
               >
-                <Icon size={14} color="var(--accent-cyan)" /> {chip.label}
+                <Icon size={14} color="#0284c7" /> {chip.label}
               </button>
             );
           })}
@@ -316,29 +318,30 @@ export default function SaathiChatbot({ isFullPage = false }) {
         {/* Messages Stream */}
         <div style={{ flex: 1, padding: '1rem 0', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {messages.map(msg => (
-            <div 
-              key={msg.id}
-              style={{
-                alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                maxWidth: '88%',
-                padding: '1rem 1.25rem',
-                borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
-                background: msg.sender === 'user' ? 'var(--accent-primary)' : '#0b0f19',
-                color: '#ffffff',
-                fontSize: '0.98rem',
-                lineHeight: 1.6,
-                border: msg.sender === 'saathi' ? '2px solid var(--border-color)' : 'none',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-              }}
-              className="animate-pop"
-            >
-              {renderFormattedMessage(msg.text)}
+            <div key={msg.id} style={{ display: 'flex', gap: '0.65rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '88%' }}>
+              {msg.sender === 'saathi' && <LadyTutorAvatar size={34} />}
+              <div 
+                style={{
+                  padding: '1rem 1.25rem',
+                  borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
+                  background: msg.sender === 'user' ? 'var(--accent-primary)' : '#f8fafc',
+                  color: msg.sender === 'user' ? '#ffffff' : '#0f172a',
+                  fontSize: '0.96rem',
+                  lineHeight: 1.6,
+                  border: msg.sender === 'saathi' ? '1px solid var(--border-color)' : 'none',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.06)'
+                }}
+                className="animate-pop"
+              >
+                {renderFormattedMessage(msg.text)}
+              </div>
             </div>
           ))}
 
           {loading && (
-            <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <RefreshCw size={14} className="spin" /> Saathi AI is generating answer & voice...
+            <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <LadyTutorAvatar size={28} />
+              <RefreshCw size={14} className="spin" /> Lady AI Tutor is generating answer & voice...
             </div>
           )}
 
@@ -354,7 +357,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
             type="button"
             onClick={toggleVoiceInput}
             className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
-            style={{ padding: '0.75rem', borderRadius: '14px', color: isMicActive ? 'var(--accent-danger)' : '#ffffff' }}
+            style={{ padding: '0.75rem', borderRadius: '14px', color: isMicActive ? 'var(--accent-danger)' : '#0f172a', background: '#f8fafc' }}
             title="Toggle Voice Input"
           >
             {isMicActive ? <MicOff size={20} color="var(--accent-danger)" /> : <Mic size={20} />}
@@ -362,18 +365,19 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
           <input 
             type="text"
-            placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
+            placeholder={isMicActive ? "Listening to your voice..." : "Ask Lady AI Tutor any study question..."}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             style={{
               flex: 1,
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: '#f8fafc',
               border: isMicActive ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)',
               borderRadius: '14px',
               padding: '0.75rem 1.1rem',
-              color: '#ffffff',
+              color: '#0f172a',
               fontSize: '0.95rem',
-              outline: 'none'
+              outline: 'none',
+              fontWeight: 500
             }}
           />
 
@@ -405,12 +409,13 @@ export default function SaathiChatbot({ isFullPage = false }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 32px rgba(99, 102, 241, 0.6)',
-            zIndex: 99
+            boxShadow: '0 8px 32px rgba(236, 72, 153, 0.45)',
+            zIndex: 99,
+            background: 'linear-gradient(135deg, #ec4899 0%, #a855f7 100%)'
           }}
-          title="Ask Saathi AI Companion"
+          title="Ask Lady AI Tutor"
         >
-          <SaathiLogoIcon size={36} />
+          <LadyTutorAvatar size={44} />
         </button>
       )}
 
@@ -429,21 +434,21 @@ export default function SaathiChatbot({ isFullPage = false }) {
             display: 'flex',
             flexDirection: 'column',
             zIndex: 100,
-            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
             overflow: 'hidden',
-            border: '2px solid var(--accent-primary)',
-            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+            border: '2px solid #ec4899',
+            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            background: '#ffffff',
+            color: '#0f172a'
           }}
         >
           {/* Header Bar */}
-          <div style={{ padding: '0.85rem 1.1rem', background: 'rgba(99, 102, 241, 0.25)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ padding: '0.85rem 1.1rem', background: 'rgba(236, 72, 153, 0.1)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(30, 41, 59, 0.9)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <SaathiLogoIcon size={24} />
-              </div>
+              <LadyTutorAvatar size={34} />
               <div>
-                <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Saathi AI Studio</h4>
-                <span style={{ fontSize: '0.72rem', color: 'var(--accent-cyan)' }}>Voice & Multilingual Tutor</span>
+                <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>Saathi AI Studio 👩‍🏫</h4>
+                <span style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>Lady AI Voice Tutor</span>
               </div>
             </div>
 
@@ -459,13 +464,13 @@ export default function SaathiChatbot({ isFullPage = false }) {
           </div>
 
           {/* Fun Learning Chips Bar */}
-          <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', padding: '0.5rem 0.75rem', background: 'rgba(0,0,0,0.3)', borderBottom: '1px solid var(--border-color)' }}>
+          <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', padding: '0.5rem 0.75rem', background: '#f8fafc', borderBottom: '1px solid var(--border-color)' }}>
             {funLearningChips.map((chip, idx) => (
               <button
                 key={idx}
                 onClick={() => sendMessage(chip.prompt)}
                 className="btn-secondary"
-                style={{ padding: '0.3rem 0.65rem', fontSize: '0.75rem', borderRadius: '12px', whiteSpace: 'nowrap', borderColor: 'rgba(99,102,241,0.3)' }}
+                style={{ padding: '0.3rem 0.65rem', fontSize: '0.75rem', borderRadius: '12px', whiteSpace: 'nowrap', borderColor: 'var(--border-color)', color: '#0f172a' }}
               >
                 {chip.label}
               </button>
@@ -475,27 +480,27 @@ export default function SaathiChatbot({ isFullPage = false }) {
           {/* Messages Area */}
           <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {messages.map(msg => (
-              <div 
-                key={msg.id}
-                style={{
-                  alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                  maxWidth: '90%',
-                  padding: '0.75rem 1rem',
-                  borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                  background: msg.sender === 'user' ? 'var(--accent-primary)' : '#0b0f19',
-                  color: '#ffffff',
-                  fontSize: '0.92rem',
-                  lineHeight: 1.6,
-                  border: msg.sender === 'saathi' ? '1px solid var(--border-color)' : 'none'
-                }}
-              >
-                {renderFormattedMessage(msg.text)}
+              <div key={msg.id} style={{ display: 'flex', gap: '0.5rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '90%' }}>
+                {msg.sender === 'saathi' && <LadyTutorAvatar size={28} />}
+                <div 
+                  style={{
+                    padding: '0.75rem 1rem',
+                    borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                    background: msg.sender === 'user' ? 'var(--accent-primary)' : '#f8fafc',
+                    color: msg.sender === 'user' ? '#ffffff' : '#0f172a',
+                    fontSize: '0.92rem',
+                    lineHeight: 1.6,
+                    border: msg.sender === 'saathi' ? '1px solid var(--border-color)' : 'none'
+                  }}
+                >
+                  {renderFormattedMessage(msg.text)}
+                </div>
               </div>
             ))}
 
             {loading && (
-              <div style={{ alignSelf: 'flex-start', color: 'var(--accent-cyan)', fontSize: '0.85rem' }}>
-                Saathi AI is generating answer...
+              <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <LadyTutorAvatar size={22} /> Lady AI Tutor is typing...
               </div>
             )}
 
@@ -505,13 +510,13 @@ export default function SaathiChatbot({ isFullPage = false }) {
           {/* Input Form */}
           <form 
             onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
-            style={{ padding: '0.75rem', background: 'rgba(15, 23, 42, 0.95)', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '0.5rem' }}
+            style={{ padding: '0.75rem', background: '#ffffff', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '0.5rem' }}
           >
             <button 
               type="button"
               onClick={toggleVoiceInput}
               className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
-              style={{ padding: '0.55rem', borderRadius: '12px' }}
+              style={{ padding: '0.55rem', borderRadius: '12px', color: isMicActive ? 'var(--accent-danger)' : '#0f172a' }}
               title="Toggle Voice Mode"
             >
               {isMicActive ? <MicOff size={16} color="var(--accent-danger)" /> : <Mic size={16} />}
@@ -519,18 +524,19 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             <input 
               type="text"
-              placeholder={isMicActive ? "Listening to your voice..." : "Ask Saathi AI any study question..."}
+              placeholder={isMicActive ? "Listening to your voice..." : "Ask Lady AI Tutor any study question..."}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{
                 flex: 1,
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: '#f8fafc',
                 border: isMicActive ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)',
                 borderRadius: '12px',
                 padding: '0.55rem 0.85rem',
-                color: '#ffffff',
+                color: '#0f172a',
                 fontSize: '0.85rem',
-                outline: 'none'
+                outline: 'none',
+                fontWeight: 500
               }}
             />
 
