@@ -1,10 +1,10 @@
 import React from 'react';
-import { LayoutDashboard, Sparkles, UserCheck, Key } from 'lucide-react';
+import { LayoutDashboard, Sparkles, UserCheck, Key, FileText } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
 import SaathiLogoIcon from './SaathiLogoIcon';
 
-export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpenApiKeyModal }) {
+export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpenApiKeyModal, onOpenPresentationModal }) {
   const { user, activeProfile, targetLanguage } = useAccessibility();
 
   const t = (key) => getTranslation(targetLanguage, key);
@@ -71,6 +71,15 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpe
         >
           <Sparkles size={16} color="#0284c7" />
           <span>{t('studioTab')}</span>
+        </button>
+
+        <button
+          onClick={onOpenPresentationModal}
+          className="btn-primary"
+          style={{ padding: '0.55rem 1.1rem', fontSize: '0.88rem', background: 'linear-gradient(135deg, #0284c7 0%, #4f46e5 100%)' }}
+        >
+          <FileText size={16} />
+          <span>📊 PPT & Architecture</span>
         </button>
       </nav>
 
