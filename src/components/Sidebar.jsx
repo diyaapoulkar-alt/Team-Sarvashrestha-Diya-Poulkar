@@ -1,14 +1,14 @@
 import React from 'react';
 import { 
   Eye, Ear, Brain, Accessibility, ChevronLeft, ChevronRight, 
-  Type, Globe, BookOpen, Focus, Sparkles, FileText
+  Type, Globe, BookOpen, Focus, Sparkles
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
 import SaathiLogoIcon from './SaathiLogoIcon';
 import LadyTutorAvatar from './LadyTutorAvatar';
 
-export default function Sidebar({ isOpen, setIsOpen, onSelectMode, onOpenPresentationModal }) {
+export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
   const { 
     activeProfile, 
     applyProfilePreset, 
@@ -225,30 +225,6 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode, onOpenPresent
             <LadyTutorAvatar size={24} />
           </div>
           {isOpen && <span style={{ fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>{t('saathiAiStudio')}</span>}
-        </button>
-
-        {/* 6. Project PPT & Architecture Deck Button */}
-        <button
-          onClick={onOpenPresentationModal}
-          className="btn-secondary"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justify: isOpen ? 'flex-start' : 'center',
-            gap: '0.75rem',
-            padding: '0.75rem 0.85rem',
-            background: '#ffffff',
-            borderColor: '#0284c7',
-            width: '100%',
-            borderRadius: '12px',
-            textAlign: 'left'
-          }}
-          title="Project PPT & Architecture 📊"
-        >
-          <div style={{ width: '24px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
-            <FileText size={20} color="#0284c7" />
-          </div>
-          {isOpen && <span style={{ fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>📊 PPT & Architecture</span>}
         </button>
 
         {/* Quick Customization Controls */}

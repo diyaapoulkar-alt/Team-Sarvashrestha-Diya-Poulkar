@@ -8,7 +8,6 @@ import SaathiChatbot from './components/SaathiChatbot';
 import FocusReadingMask from './components/FocusReadingMask';
 import ApiKeyModal from './components/ApiKeyModal';
 import AuthModal from './components/AuthModal';
-import PresentationModal from './components/PresentationModal';
 import './styles/design-system.css';
 
 function MainLayout() {
@@ -16,7 +15,6 @@ function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [presentationModalOpen, setPresentationModalOpen] = useState(false);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
@@ -26,7 +24,6 @@ function MainLayout() {
         isOpen={sidebarOpen}
         setIsOpen={setSidebarOpen}
         onSelectMode={(tabName) => setActiveTab(tabName)}
-        onOpenPresentationModal={() => setPresentationModalOpen(true)}
       />
 
       {/* Main Content View (Right Side) */}
@@ -38,7 +35,6 @@ function MainLayout() {
           setActiveTab={setActiveTab}
           onOpenApiKeyModal={() => setApiKeyModalOpen(true)}
           onOpenAuthModal={() => setAuthModalOpen(true)}
-          onOpenPresentationModal={() => setPresentationModalOpen(true)}
         />
 
         {/* Main Content Workspace */}
@@ -67,13 +63,11 @@ function MainLayout() {
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', fontSize: '0.85rem', color: '#94a3b8' }}>
-              <button onClick={() => setPresentationModalOpen(true)} style={{ background: 'none', border: 'none', color: '#38bdf8', cursor: 'pointer', fontWeight: 600 }}>
-                📊 View PPT & Architecture
-              </button>
-              <span>•</span>
               <span>Powered by Groq Cloud AI</span>
               <span>•</span>
               <span>Multimodal Learning</span>
+              <span>•</span>
+              <span>Inclusive Campus Companion</span>
             </div>
           </div>
         </footer>
@@ -95,11 +89,6 @@ function MainLayout() {
       <AuthModal 
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
-      />
-
-      <PresentationModal 
-        isOpen={presentationModalOpen}
-        onClose={() => setPresentationModalOpen(false)}
       />
 
     </div>
