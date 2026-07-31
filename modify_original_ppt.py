@@ -12,23 +12,23 @@ def update_original_pptx():
     print(f"Loading original presentation template: {src_file}")
     prs = Presentation(src_file)
 
-    # Add Architecture Diagram image to Slide 5 (Technical Strategy: Methodology)
+    # 1. Add System Architecture Sequence Diagram image to Slide 5 (Technical Strategy: Methodology)
     slide5 = prs.slides[4]
-    arch_img = os.path.join(os.getcwd(), 'public', 'architecture_diagram.png')
-    if os.path.exists(arch_img):
-        # Insert high-res Architecture Diagram image onto slide 5
-        slide5.shapes.add_picture(arch_img, Inches(1.2), Inches(2.2), Inches(10.8), Inches(4.8))
-        print("Embedded high-res architecture_diagram.png into Slide 5!")
+    seq_img = os.path.join(os.getcwd(), 'public', 'system_architecture_sequence.png')
+    if os.path.exists(seq_img):
+        # Insert high-res Sequence Diagram image onto slide 5
+        slide5.shapes.add_picture(seq_img, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.2))
+        print("Embedded high-res system_architecture_sequence.png into Slide 5!")
 
-    # Add Workflow Diagram image to Slide 6 (Implementation Flow)
+    # 2. Add Workflow Diagram image to Slide 6 (Implementation Flow)
     slide6 = prs.slides[5]
     wf_img = os.path.join(os.getcwd(), 'public', 'workflow_diagram.png')
     if os.path.exists(wf_img):
         # Insert high-res Workflow Flowchart image onto slide 6
-        slide6.shapes.add_picture(wf_img, Inches(1.2), Inches(2.0), Inches(10.8), Inches(4.8))
+        slide6.shapes.add_picture(wf_img, Inches(0.8), Inches(1.8), Inches(11.7), Inches(5.2))
         print("Embedded high-res workflow_diagram.png into Slide 6!")
 
-    # Save to user's requested PPT destinations
+    # Save to user's PPT submission destinations
     dest1 = r'C:\Users\User\Downloads\saathi-sarvasretha-submission.pptx'
     dest2 = r'C:\Users\User\Downloads\Saathi-Your-Accessibility-Copilot-Final.pptx'
     dest3 = r'C:\Users\User\Desktop\saathi-sarvasretha-submission.pptx'
@@ -40,7 +40,6 @@ def update_original_pptx():
     except Exception as e:
         print(f"Desktop save note: {e}")
 
-    # Try saving to saathi-sarvasretha.pptx if unlocked
     try:
         prs.save(r'C:\Users\User\Downloads\saathi-sarvasretha.pptx')
     except Exception as e:
