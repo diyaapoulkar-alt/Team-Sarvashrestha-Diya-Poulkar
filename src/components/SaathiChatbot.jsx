@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, HelpCircle, Gamepad2, Lightbulb, Smile, Award, Maximize2, Minimize2, RefreshCw, Radio } from 'lucide-react';
+import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, HelpCircle, Gamepad2, Lightbulb, Smile, Award, Maximize2, Minimize2, RefreshCw, Radio, BookOpen, CheckCircle } from 'lucide-react';
 import { askSaathiAssistant } from '../services/groqApi';
 import { useAccessibility } from '../context/AccessibilityContext';
 import SaathiLogoIcon from './SaathiLogoIcon';
@@ -11,7 +11,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const [isExpanded, setIsExpanded] = useState(isFullPage);
   const [isMicActive, setIsMicActive] = useState(false);
 
-  const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am your AI Lady Tutor at Saathi AI Studio. Ask me any academic concept, homework question, or click one of the interactive study modes below!';
+  const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am your AI Lady Tutor at Saathi AI Studio. Ask me any academic concept, homework question, or click one of the interactive study modes!';
 
   const [messages, setMessages] = useState([
     {
@@ -264,127 +264,195 @@ export default function SaathiChatbot({ isFullPage = false }) {
   // Full-page Studio View inside dashboard tab
   if (isFullPage) {
     return (
-      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '660px', background: '#ffffff', color: '#0f172a' }}>
+      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', gap: '1.5rem', background: '#ffffff', color: '#0f172a', minHeight: '660px' }}>
         
-        {/* Header Bar with Enlarged Pretty Lady Tutor Vector Avatar */}
-        <div style={{ paddingBottom: '1.1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <LadyTutorAvatar size={64} />
-            <div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                Saathi AI Studio 👩‍🏫
-              </h3>
-              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                Empathetic AI Lady Tutor for academic explanations, pop quizzes, and exam prep.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            {isMicActive && (
-              <span className="badge-emerald" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <Radio size={12} className="recording-pulse" /> Voice Mic Active
-              </span>
-            )}
-
-            {isSpeaking && (
-              <button onClick={stopSpeaking} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
-                <VolumeX size={16} /> Stop Voice
-              </button>
-            )}
-            <button onClick={clearChat} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
-              <RefreshCw size={14} /> Clear Chat
-            </button>
-          </div>
-        </div>
-
-        {/* Fun Interactive Chips Bar */}
-        <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', padding: '0.75rem 0', borderBottom: '1px solid var(--border-color)' }}>
-          {funLearningChips.map((chip, idx) => {
-            const Icon = chip.icon;
-            return (
-              <button
-                key={idx}
-                onClick={() => sendMessage(chip.prompt)}
-                className="btn-secondary"
-                style={{ padding: '0.45rem 0.85rem', fontSize: '0.82rem', borderRadius: '12px', whiteSpace: 'nowrap', background: '#f8fafc', borderColor: 'var(--border-color)', color: '#0f172a' }}
-              >
-                <Icon size={14} color="#0284c7" /> {chip.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Messages Stream */}
-        <div style={{ flex: 1, padding: '1rem 0', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {messages.map(msg => (
-            <div key={msg.id} style={{ display: 'flex', gap: '0.75rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '88%' }}>
-              {msg.sender === 'saathi' && <LadyTutorAvatar size={40} />}
-              <div 
-                style={{
-                  padding: '1rem 1.25rem',
-                  borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
-                  background: msg.sender === 'user' ? 'var(--accent-primary)' : '#f8fafc',
-                  color: msg.sender === 'user' ? '#ffffff' : '#0f172a',
-                  fontSize: '0.96rem',
-                  lineHeight: 1.6,
-                  border: msg.sender === 'saathi' ? '1px solid var(--border-color)' : 'none',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.06)'
-                }}
-                className="animate-pop"
-              >
-                {renderFormattedMessage(msg.text)}
+        {/* Left Column: Chat Conversation Stream */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          
+          {/* Header Bar */}
+          <div style={{ paddingBottom: '1.1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <LadyTutorAvatar size={48} />
+              <div>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  Saathi AI Studio 👩‍🏫
+                </h3>
+                <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                  Interactive Lady AI Tutor for academic explanations, pop quizzes, and exam prep.
+                </p>
               </div>
             </div>
-          ))}
 
-          {loading && (
-            <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <LadyTutorAvatar size={34} />
-              <RefreshCw size={14} className="spin" /> Lady AI Tutor is generating answer & voice...
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              {isMicActive && (
+                <span className="badge-emerald" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <Radio size={12} className="recording-pulse" /> Voice Mic Active
+                </span>
+              )}
+
+              {isSpeaking && (
+                <button onClick={stopSpeaking} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
+                  <VolumeX size={16} /> Stop Voice
+                </button>
+              )}
+              <button onClick={clearChat} className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}>
+                <RefreshCw size={14} /> Clear Chat
+              </button>
             </div>
-          )}
+          </div>
 
-          <div ref={chatEndRef} />
+          {/* Fun Interactive Chips Bar */}
+          <div style={{ display: 'flex', gap: '0.5rem', overflowX: 'auto', padding: '0.75rem 0', borderBottom: '1px solid var(--border-color)' }}>
+            {funLearningChips.map((chip, idx) => {
+              const Icon = chip.icon;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => sendMessage(chip.prompt)}
+                  className="btn-secondary"
+                  style={{ padding: '0.45rem 0.85rem', fontSize: '0.82rem', borderRadius: '12px', whiteSpace: 'nowrap', background: '#f8fafc', borderColor: 'var(--border-color)', color: '#0f172a' }}
+                >
+                  <Icon size={14} color="#0284c7" /> {chip.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Messages Stream */}
+          <div style={{ flex: 1, padding: '1rem 0', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '420px' }}>
+            {messages.map(msg => (
+              <div key={msg.id} style={{ display: 'flex', gap: '0.75rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '88%' }}>
+                {msg.sender === 'saathi' && <LadyTutorAvatar size={36} />}
+                <div 
+                  style={{
+                    padding: '1rem 1.25rem',
+                    borderRadius: msg.sender === 'user' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
+                    background: msg.sender === 'user' ? 'var(--accent-primary)' : '#f8fafc',
+                    color: msg.sender === 'user' ? '#ffffff' : '#0f172a',
+                    fontSize: '0.96rem',
+                    lineHeight: 1.6,
+                    border: msg.sender === 'saathi' ? '1px solid var(--border-color)' : 'none',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.06)'
+                  }}
+                  className="animate-pop"
+                >
+                  {renderFormattedMessage(msg.text)}
+                </div>
+              </div>
+            ))}
+
+            {loading && (
+              <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <LadyTutorAvatar size={32} />
+                <RefreshCw size={14} className="spin" /> Lady AI Tutor is generating answer & voice...
+              </div>
+            )}
+
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Input Controls */}
+          <form 
+            onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
+            style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}
+          >
+            <button 
+              type="button"
+              onClick={toggleVoiceInput}
+              className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
+              style={{ padding: '0.75rem', borderRadius: '14px', color: isMicActive ? 'var(--accent-danger)' : '#0f172a', background: '#f8fafc' }}
+              title="Toggle Voice Input"
+            >
+              {isMicActive ? <MicOff size={20} color="var(--accent-danger)" /> : <Mic size={20} />}
+            </button>
+
+            <input 
+              type="text"
+              placeholder={isMicActive ? "Listening to your voice..." : "Ask Lady AI Tutor any study question..."}
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              style={{
+                flex: 1,
+                background: '#f8fafc',
+                border: isMicActive ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)',
+                borderRadius: '14px',
+                padding: '0.75rem 1.1rem',
+                color: '#0f172a',
+                fontSize: '0.95rem',
+                outline: 'none',
+                fontWeight: 500
+              }}
+            />
+
+            <button type="submit" className="btn-primary" style={{ padding: '0.75rem 1.5rem', borderRadius: '14px' }}>
+              <Send size={18} /> Send
+            </button>
+          </form>
+
         </div>
 
-        {/* Input Controls */}
-        <form 
-          onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
-          style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}
+        {/* Right Column: Bigger Lady Tutor Image Showcase Panel */}
+        <div 
+          className="glass-card animate-pop" 
+          style={{
+            width: '280px',
+            background: 'linear-gradient(180deg, #fdf2f8 0%, #f1f5f9 100%)',
+            border: '2px solid rgba(236, 72, 153, 0.3)',
+            borderRadius: '20px',
+            padding: '1.25rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            gap: '1rem',
+            boxShadow: '0 8px 30px rgba(236, 72, 153, 0.15)',
+            flexShrink: 0
+          }}
         >
-          <button 
-            type="button"
-            onClick={toggleVoiceInput}
-            className={`btn-secondary ${isMicActive ? 'recording-pulse' : ''}`}
-            style={{ padding: '0.75rem', borderRadius: '14px', color: isMicActive ? 'var(--accent-danger)' : '#0f172a', background: '#f8fafc' }}
-            title="Toggle Voice Input"
-          >
-            {isMicActive ? <MicOff size={20} color="var(--accent-danger)" /> : <Mic size={20} />}
-          </button>
+          {/* Speech Bubble over Tutor */}
+          <div style={{ background: '#ffffff', border: '1px solid #f472b6', padding: '0.75rem 0.9rem', borderRadius: '16px', fontSize: '0.85rem', color: '#0f172a', fontWeight: 600, boxShadow: '0 4px 14px rgba(0,0,0,0.06)', position: 'relative' }}>
+            "Namaste! I am your AI Lady Tutor. Let's master your syllabus together!"
+            <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderTop: '8px solid #ffffff' }} />
+          </div>
 
-          <input 
-            type="text"
-            placeholder={isMicActive ? "Listening to your voice..." : "Ask Lady AI Tutor any study question..."}
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            style={{
-              flex: 1,
-              background: '#f8fafc',
-              border: isMicActive ? '2px solid var(--accent-emerald)' : '1px solid var(--border-color)',
-              borderRadius: '14px',
-              padding: '0.75rem 1.1rem',
-              color: '#0f172a',
-              fontSize: '0.95rem',
-              outline: 'none',
-              fontWeight: 500
-            }}
-          />
+          {/* Bigger Lady Tutor Image */}
+          <div style={{ position: 'relative', width: '210px', height: '230px', filter: 'drop-shadow(0 10px 20px rgba(236, 72, 153, 0.25))' }}>
+            <img 
+              src="/lady_tutor.png" 
+              alt="AI Lady Tutor Character" 
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </div>
 
-          <button type="submit" className="btn-primary" style={{ padding: '0.75rem 1.5rem', borderRadius: '14px' }}>
-            <Send size={18} /> Send
-          </button>
-        </form>
+          {/* Tutor Bio & Status Badge */}
+          <div style={{ width: '100%' }}>
+            <div className="badge-emerald" style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem', marginBottom: '0.5rem' }}>
+              <CheckCircle size={14} /> Tutor Online & Active
+            </div>
+            <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a' }}>Prof. Saathi AI</h4>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Multimodal AI Campus Educator</p>
+          </div>
+
+          {/* Quick Trigger Actions */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+            <button 
+              onClick={() => sendMessage('Give me a 3-question exam pop quiz!')}
+              className="btn-secondary"
+              style={{ width: '100%', padding: '0.5rem', fontSize: '0.8rem', justifyContent: 'center', background: '#ffffff' }}
+            >
+              🎯 Start Pop Quiz
+            </button>
+
+            <button 
+              onClick={() => sendMessage('Explain Ohm\'s Law for a 5th grader')}
+              className="btn-secondary"
+              style={{ width: '100%', padding: '0.5rem', fontSize: '0.8rem', justifyContent: 'center', background: '#ffffff' }}
+            >
+              💡 Simple 5th-Grade Explanation
+            </button>
+          </div>
+
+        </div>
 
       </div>
     );
@@ -445,7 +513,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
           {/* Header Bar */}
           <div style={{ padding: '0.85rem 1.1rem', background: 'rgba(236, 72, 153, 0.1)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <LadyTutorAvatar size={44} />
+              <LadyTutorAvatar size={40} />
               <div>
                 <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>Saathi AI Studio 👩‍🏫</h4>
                 <span style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>Lady AI Voice Tutor</span>
@@ -481,7 +549,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
           <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {messages.map(msg => (
               <div key={msg.id} style={{ display: 'flex', gap: '0.5rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '90%' }}>
-                {msg.sender === 'saathi' && <LadyTutorAvatar size={32} />}
+                {msg.sender === 'saathi' && <LadyTutorAvatar size={28} />}
                 <div 
                   style={{
                     padding: '0.75rem 1rem',
@@ -500,7 +568,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             {loading && (
               <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <LadyTutorAvatar size={26} /> Lady AI Tutor is typing...
+                <LadyTutorAvatar size={24} /> Lady AI Tutor is typing...
               </div>
             )}
 
