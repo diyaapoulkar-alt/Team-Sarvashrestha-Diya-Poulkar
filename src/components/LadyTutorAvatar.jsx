@@ -16,7 +16,7 @@ export default function LadyTutorAvatar({ size = 48, className = "" }) {
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxShadow: '0 4px 15px rgba(236, 72, 153, 0.4)',
+        boxShadow: '0 4px 15px rgba(236, 72, 153, 0.35)',
         flexShrink: 0,
         position: 'relative',
         overflow: 'hidden'
@@ -29,6 +29,7 @@ export default function LadyTutorAvatar({ size = 48, className = "" }) {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
+          objectPosition: 'top center',
           borderRadius: '50%',
           background: '#ffffff'
         }}
