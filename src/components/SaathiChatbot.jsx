@@ -11,7 +11,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const [isExpanded, setIsExpanded] = useState(isFullPage);
   const [isMicActive, setIsMicActive] = useState(false);
 
-  const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am Saathi, your interactive Multimodal AI Study Copilot. Ask me anything, or try one of the fun learning modes below!';
+  const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am your AI Lady Tutor at Saathi AI Studio. Ask me any academic concept, homework question, or click one of the interactive study modes below!';
 
   const [messages, setMessages] = useState([
     {
@@ -264,18 +264,18 @@ export default function SaathiChatbot({ isFullPage = false }) {
   // Full-page Studio View inside dashboard tab
   if (isFullPage) {
     return (
-      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '640px', background: '#ffffff', color: '#0f172a' }}>
+      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '660px', background: '#ffffff', color: '#0f172a' }}>
         
-        {/* Header Bar with Lady Tutor Avatar */}
-        <div style={{ paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-            <LadyTutorAvatar size={48} />
+        {/* Header Bar with Enlarged Pretty Lady Tutor Vector Avatar */}
+        <div style={{ paddingBottom: '1.1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <LadyTutorAvatar size={64} />
             <div>
-              <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 Saathi AI Studio 👩‍🏫
               </h3>
-              <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                Interactive Lady AI Tutor for academic explanations, pop quizzes, and exam prep.
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Empathetic AI Lady Tutor for academic explanations, pop quizzes, and exam prep.
               </p>
             </div>
           </div>
@@ -318,8 +318,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
         {/* Messages Stream */}
         <div style={{ flex: 1, padding: '1rem 0', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {messages.map(msg => (
-            <div key={msg.id} style={{ display: 'flex', gap: '0.65rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '88%' }}>
-              {msg.sender === 'saathi' && <LadyTutorAvatar size={34} />}
+            <div key={msg.id} style={{ display: 'flex', gap: '0.75rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '88%' }}>
+              {msg.sender === 'saathi' && <LadyTutorAvatar size={40} />}
               <div 
                 style={{
                   padding: '1rem 1.25rem',
@@ -340,7 +340,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
           {loading && (
             <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <LadyTutorAvatar size={28} />
+              <LadyTutorAvatar size={34} />
               <RefreshCw size={14} className="spin" /> Lady AI Tutor is generating answer & voice...
             </div>
           )}
@@ -402,8 +402,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
             position: 'fixed',
             bottom: '24px',
             right: '24px',
-            width: '64px',
-            height: '64px',
+            width: '68px',
+            height: '68px',
             borderRadius: '50%',
             padding: 0,
             display: 'flex',
@@ -415,7 +415,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
           }}
           title="Ask Lady AI Tutor"
         >
-          <LadyTutorAvatar size={44} />
+          <LadyTutorAvatar size={48} />
         </button>
       )}
 
@@ -444,8 +444,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
         >
           {/* Header Bar */}
           <div style={{ padding: '0.85rem 1.1rem', background: 'rgba(236, 72, 153, 0.1)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <LadyTutorAvatar size={34} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <LadyTutorAvatar size={44} />
               <div>
                 <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>Saathi AI Studio 👩‍🏫</h4>
                 <span style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>Lady AI Voice Tutor</span>
@@ -481,7 +481,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
           <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {messages.map(msg => (
               <div key={msg.id} style={{ display: 'flex', gap: '0.5rem', alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '90%' }}>
-                {msg.sender === 'saathi' && <LadyTutorAvatar size={28} />}
+                {msg.sender === 'saathi' && <LadyTutorAvatar size={32} />}
                 <div 
                   style={{
                     padding: '0.75rem 1rem',
@@ -500,7 +500,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             {loading && (
               <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <LadyTutorAvatar size={22} /> Lady AI Tutor is typing...
+                <LadyTutorAvatar size={26} /> Lady AI Tutor is typing...
               </div>
             )}
 
