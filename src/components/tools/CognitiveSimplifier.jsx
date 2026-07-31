@@ -42,12 +42,12 @@ export default function CognitiveSimplifier() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#0f172a' }}>
       
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <h2 style={{ fontSize: '1.6rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Brain size={24} color="var(--accent-cyan)" /> Cognitive PDF & Textbook Simplifier
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
@@ -118,10 +118,10 @@ export default function CognitiveSimplifier() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
         
         {/* Left Column: Raw Source Text Input */}
-        <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', background: '#ffffff' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
               <FileText size={16} /> Paste Textbook Text or Notes:
             </span>
 
@@ -139,7 +139,7 @@ export default function CognitiveSimplifier() {
             placeholder="Paste your complex textbook paragraph, PDF notes, or lab manual content here..."
             value={sourceText}
             onChange={(e) => setSourceText(e.target.value)}
-            style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', color: 'var(--text-primary)', fontSize: '0.95rem', fontFamily: 'inherit', resize: 'vertical', outline: 'none' }}
+            style={{ width: '100%', background: '#f8fafc', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', color: '#0f172a', fontSize: '0.95rem', fontFamily: 'inherit', resize: 'vertical', outline: 'none', fontWeight: 500 }}
           />
 
           <button 
@@ -155,7 +155,7 @@ export default function CognitiveSimplifier() {
         </div>
 
         {/* Right Column: Simplified Output */}
-        <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', background: '#ffffff' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
@@ -171,7 +171,7 @@ export default function CognitiveSimplifier() {
             </button>
           </div>
 
-          <div style={{ flex: 1, minHeight: '260px', background: 'rgba(0,0,0,0.3)', borderRadius: '12px', padding: '1.25rem', border: '1px solid var(--border-color)', whiteSpace: 'pre-line', fontSize: '0.95rem', lineHeight: 1.7, overflowY: 'auto' }}>
+          <div style={{ flex: 1, minHeight: '260px', background: '#f8fafc', borderRadius: '12px', padding: '1.25rem', border: '1px solid var(--border-color)', whiteSpace: 'pre-line', fontSize: '0.95rem', lineHeight: 1.7, overflowY: 'auto', color: '#0f172a', fontWeight: 600 }}>
             {loading ? (
               <div style={{ textAlign: 'center', paddingTop: '4rem', color: 'var(--text-muted)' }}>
                 <p>Generating grounded simplification at {readingLevel.toUpperCase()} level...</p>

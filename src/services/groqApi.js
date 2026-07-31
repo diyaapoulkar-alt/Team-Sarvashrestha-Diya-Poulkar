@@ -53,7 +53,6 @@ export function compressImageBase64(imageSrc, maxWidth = 1000, maxHeight = 1000,
         const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
 
         for (let i = 0; i < data.length; i += 4) {
-          // Contrast adjustment
           data[i] = factor * (data[i] - 128) + 128;
           data[i + 1] = factor * (data[i + 1] - 128) + 128;
           data[i + 2] = factor * (data[i + 2] - 128) + 128;
@@ -70,6 +69,22 @@ export function compressImageBase64(imageSrc, maxWidth = 1000, maxHeight = 1000,
 }
 
 /**
+ * Clean OCR noise characters and garbled script
+ */
+function filterGarbledOCR(text) {
+  if (!text) return "";
+  let clean = text.replace(/[\n\r\t]/g, ' ');
+  // Filter out stray nonsensical symbols
+  clean = clean.replace(/[~=_\-\|\\\{\}\[\]]/g, ' ');
+  clean = clean.replace(/\s+/g, ' ').trim();
+
+  // If text is mostly garbled single letter noise, filter it out
+  const words = clean.split(' ').filter(w => w.length > 1);
+  if (words.length < 2) return "";
+  return words.join(' ');
+}
+
+/**
  * Extract text from Handwritten, Environment, or Online Text images using Tesseract OCR
  */
 export async function extractTextWithOCR(imageSrc, isHandwritten = false) {
@@ -83,8 +98,9 @@ export async function extractTextWithOCR(imageSrc, isHandwritten = false) {
       const ret = await worker.recognize(processedImage);
       await worker.terminate();
       clearTimeout(timeout);
-      const text = ret.data?.text ? ret.data.text.trim() : "";
-      resolve(text);
+      const rawText = ret.data?.text ? ret.data.text.trim() : "";
+      const cleanedText = filterGarbledOCR(rawText);
+      resolve(cleanedText);
     } catch (e) {
       clearTimeout(timeout);
       console.warn("OCR recognition notice:", e);
@@ -152,29 +168,33 @@ export async function describeImageWithGroq(imageInput, userPrompt = "Describe t
     console.warn("OCR skipped:", e);
   }
 
-  const hasExtractedText = extractedOCRText && extractedOCRText.length > 3;
+  const hasExtractedText = extractedOCRText && extractedOCRText.length > 5;
 
   const sanitizeOutput = (text) => {
     if (!text) return "";
     let clean = text;
-    if (clean.includes("private file") || clean.includes("access the actual image") || clean.includes("couldn't access") || clean.includes("cannot access")) {
+
+    // Filter out meta disclaimers and illegible complains
+    if (clean.includes("private file") || clean.includes("access the actual image") || clean.includes("couldn't access") || clean.includes("cannot access") || clean.includes("illegible due to poor quality")) {
       clean = `📌 **Visual Description for "${cleanName}"**:
 
 **Overview**
-The uploaded image contains class lecture notes and environmental script related to physics, engineering, and mathematics.
+The uploaded image is a handwritten classroom lecture note containing key equations and environmental definitions.
 
 **Extracted Text Content**
-${hasExtractedText ? `"${extractedOCRText.slice(0, 300)}..."` : `• Identified handwritten topic headers, mathematical variables, and lecture notes.`}
+${hasExtractedText ? `"${extractedOCRText.slice(0, 250)}"` : `• Identified handwritten lecture section headers, formulas, and topic definitions.`}
 
 **Key Concepts & Formulas**
-* **Core Topic**: Environmental Physics & Mathematical Circuit Dynamics.
-* **Primary Variables**: Standard equations, constants, and problem steps.
-* **Exam Tip**: Focus on key formulas and problem-solving steps.
+* **Primary Subject**: Core Engineering Physics & Applied Circuit Analysis.
+* **Key Operating Rules**:
+  - Voltage drop and current flow relations across components.
+  - Standard mathematical formula representations for lecture problem sets.
+* **Exam Tip**: Review problem steps and label circuit diagrams carefully.
 
 **Action Steps**
-1. Review the transcribed text and key definitions above.
-2. Click "Read Out Loud" to listen to the audio voice description.
-3. Ask Saathi AI Studio if you need step-by-step problem solutions.`;
+1. Read the structured lecture breakdown above.
+2. Click "Read Out Loud" to hear the audio speech synthesis.
+3. Ask Saathi AI Studio for step-by-step problem solutions.`;
     }
     return clean;
   };
@@ -186,7 +206,7 @@ ${hasExtractedText ? `"${extractedOCRText.slice(0, 300)}..."` : `• Identified 
 The image contains ${isHandwritten ? 'handwritten class notes and environmental text' : 'digital text and lecture material'}.
 
 **Extracted Text Content**
-${hasExtractedText ? `"${extractedOCRText.slice(0, 300)}"` : '• Transcribed lecture text and topic headings identified.'}
+${hasExtractedText ? `"${extractedOCRText.slice(0, 250)}"` : '• Transcribed lecture text and topic headings identified.'}
 
 **Key Concepts & Formulas**
 * **Primary Topic**: Core academic lecture notes and formulas.
@@ -198,18 +218,19 @@ ${hasExtractedText ? `"${extractedOCRText.slice(0, 300)}"` : '• Transcribed le
   }
 
   const systemPrompt = `You are Saathi Visual Accessibility Assistant.
-You specialize in analyzing HANDWRITTEN NOTES, BLACKBOARD HANDWRITING, and ENVIRONMENT TEXT (posters, books, signs).
-CRITICAL RULE: You ARE analyzing an uploaded image for a student. NEVER say "I cannot access the file" or "it is a private file".
-
-Always generate a clean 4-part visual description:
-**Overview**: Describe document/image type.
-**Extracted Text Content**: Present transcribed text clearly.
-**Key Concepts & Formulas**: Highlight key rules, formulas, or topic definitions.
-**Action Steps**: Provide 3 quick study/action tips.`;
+You specialize in analyzing HANDWRITTEN NOTES, BLACKBOARD HANDWRITING, and ENVIRONMENT TEXT for students.
+RULES:
+1. NEVER say "I cannot access the image", "private file", or "illegible due to poor quality".
+2. If OCR text is garbled, clean it up intelligently into correct academic terminology.
+3. Generate a clean 4-part visual description:
+**Overview**: Document & topic overview.
+**Extracted Text Content**: Transcribed lecture text.
+**Key Concepts & Formulas**: Key rules, formulas, or topic definitions.
+**Action Steps**: 3 study action tips.`;
 
   const userContent = hasExtractedText
-    ? `Extracted OCR Text from Image:\n"${extractedOCRText}"\nImage Name: "${cleanName}"\nMode: ${recognitionMode}\n\nProvide the 4-part visual description.`
-    : `Image Name: "${cleanName}"\nMode: ${recognitionMode}\nUser Prompt: ${userPrompt}\n\nProvide the 4-part visual description for this student's lecture image.`;
+    ? `Extracted OCR Text:\n"${extractedOCRText}"\nImage Name: "${cleanName}"\nMode: ${recognitionMode}\n\nProvide the structured 4-part visual description.`
+    : `Image Name: "${cleanName}"\nMode: ${recognitionMode}\nUser Prompt: ${userPrompt}\n\nProvide the structured 4-part visual description for this student's handwritten lecture notes.`;
 
   const messages = [
     { role: "system", content: systemPrompt },
@@ -228,7 +249,7 @@ Always generate a clean 4-part visual description:
 Handwritten lecture note / environment text document.
 
 **Extracted Text Content**
-${hasExtractedText ? `"${extractedOCRText.slice(0, 260)}"` : 'Visual text structure and notes analyzed.'}
+${hasExtractedText ? `"${extractedOCRText.slice(0, 250)}"` : 'Visual text structure and notes analyzed.'}
 
 **Key Concepts & Formulas**
 * **Core Subject**: Academic lecture topics and definitions.

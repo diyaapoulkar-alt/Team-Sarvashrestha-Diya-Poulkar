@@ -92,11 +92,11 @@ export default function VisionAssist() {
   };
 
   return (
-    <div className="animate-fade-up">
+    <div className="animate-fade-up" style={{ color: '#0f172a' }}>
       {/* Header Banner */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
         <div>
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Eye color="var(--accent-primary)" /> {t('visionHeader')}
           </h3>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
@@ -127,9 +127,9 @@ export default function VisionAssist() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
         
         {/* Left: Input Frame */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', background: '#ffffff' }}>
           
-          <div style={{ position: 'relative', width: '100%', height: '260px', borderRadius: '16px', background: 'rgba(0,0,0,0.4)', border: '2px dashed var(--border-color)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'relative', width: '100%', height: '260px', borderRadius: '16px', background: 'rgba(241,245,249,0.9)', border: '2px dashed var(--border-color)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             
             {isCameraActive ? (
               <video ref={videoRef} autoPlay playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -177,9 +177,9 @@ export default function VisionAssist() {
         </div>
 
         {/* Right: Description Output Viewer */}
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#ffffff' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>Vision AI Output</h4>
+            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>Vision AI Output</h4>
             
             {description && (
               <button 
@@ -193,7 +193,7 @@ export default function VisionAssist() {
             )}
           </div>
 
-          <div style={{ flex: 1, overflowY: 'auto', fontSize: '0.95rem', lineHeight: 1.6, whiteSpace: 'pre-line', color: '#ffffff' }}>
+          <div style={{ flex: 1, overflowY: 'auto', fontSize: '0.95rem', lineHeight: 1.6, whiteSpace: 'pre-line', color: '#0f172a', fontWeight: 600 }}>
             {description ? (
               description
             ) : (
