@@ -418,7 +418,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
           {/* Bigger Lady Tutor Image */}
           <div style={{ position: 'relative', width: '210px', height: '230px', filter: 'drop-shadow(0 10px 20px rgba(236, 72, 153, 0.25))' }}>
             <img 
-              src="/lady_tutor.png" 
+              src="/lady_tutor.jpg?v=3" 
               alt="AI Lady Tutor Character" 
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />

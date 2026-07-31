@@ -23,7 +23,7 @@ export default function LadyTutorAvatar({ size = 48, className = "" }) {
       }}
     >
       <img 
-        src="/lady_tutor.png" 
+        src="/lady_tutor.jpg?v=3" 
         alt="Lady AI Tutor" 
         style={{
           width: '100%',
