@@ -41,6 +41,79 @@ export default function CognitiveSimplifier() {
     setSourceText(denseSample);
   };
 
+  // Rich Markdown & Bullet Point Renderer for Simplified Textbook Output
+  const renderFormattedOutput = (text) => {
+    if (!text) return null;
+
+    const lines = text.split('\n');
+    const elements = [];
+
+    lines.forEach((line, index) => {
+      let trimmed = line.trim();
+
+      if (!trimmed) {
+        elements.push(<div key={`br-${index}`} style={{ height: '0.4rem' }} />);
+        return;
+      }
+
+      // Handle Bold Section Headers e.g. **Artificial Intelligence (AI)** or **What is AI?**
+      if (trimmed.startsWith('**') && (trimmed.endsWith('**') || trimmed.endsWith(':**') || trimmed.includes('**'))) {
+        const headerText = trimmed.replace(/\*\*/g, '');
+        elements.push(
+          <div key={index} style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0284c7', marginTop: '0.85rem', marginBottom: '0.35rem', fontFamily: 'var(--font-family-heading)' }}>
+            {headerText}
+          </div>
+        );
+      }
+      // Handle Bullet Points e.g. - AI is a technology... or • Healthcare: helps doctors...
+      else if (trimmed.startsWith('- ') || trimmed.startsWith('• ') || trimmed.startsWith('* ') || trimmed.startsWith('+ ')) {
+        const bulletContent = trimmed.substring(2);
+        
+        // Parse any inline **bold** words inside bullet
+        const parts = bulletContent.split(/(\*\*.*?\*\*)/g);
+        const parsedBullet = parts.map((part, pIdx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return (
+              <strong key={pIdx} style={{ color: '#0369a1', fontWeight: 800 }}>
+                {part.slice(2, -2)}
+              </strong>
+            );
+          }
+          return part;
+        });
+
+        elements.push(
+          <div key={index} style={{ display: 'flex', gap: '0.6rem', marginLeft: '0.5rem', marginTop: '0.3rem', color: '#0f172a', fontWeight: 600 }}>
+            <span style={{ color: '#0284c7', fontWeight: 800, fontSize: '1.1rem', lineHeight: 1 }}>•</span>
+            <span style={{ flex: 1, lineHeight: 1.6 }}>{parsedBullet}</span>
+          </div>
+        );
+      }
+      // Standard Text Paragraphs
+      else {
+        const parts = trimmed.split(/(\*\*.*?\*\*)/g);
+        const parsedLine = parts.map((part, pIdx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return (
+              <strong key={pIdx} style={{ color: '#0369a1', fontWeight: 800 }}>
+                {part.slice(2, -2)}
+              </strong>
+            );
+          }
+          return part;
+        });
+
+        elements.push(
+          <p key={index} style={{ marginBottom: '0.4rem', lineHeight: 1.6, color: '#0f172a', fontWeight: 600 }}>
+            {parsedLine}
+          </p>
+        );
+      }
+    });
+
+    return elements;
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', color: '#0f172a' }}>
       
@@ -171,13 +244,13 @@ export default function CognitiveSimplifier() {
             </button>
           </div>
 
-          <div style={{ flex: 1, minHeight: '260px', background: '#f8fafc', borderRadius: '12px', padding: '1.25rem', border: '1px solid var(--border-color)', whiteSpace: 'pre-line', fontSize: '0.95rem', lineHeight: 1.7, overflowY: 'auto', color: '#0f172a', fontWeight: 600 }}>
+          <div style={{ flex: 1, minHeight: '260px', background: '#f8fafc', borderRadius: '12px', padding: '1.25rem', border: '1px solid var(--border-color)', fontSize: '0.95rem', lineHeight: 1.7, overflowY: 'auto', color: '#0f172a', fontWeight: 600 }}>
             {loading ? (
               <div style={{ textAlign: 'center', paddingTop: '4rem', color: 'var(--text-muted)' }}>
                 <p>Generating grounded simplification at {readingLevel.toUpperCase()} level...</p>
               </div>
             ) : simplifiedOutput ? (
-              simplifiedOutput
+              renderFormattedOutput(simplifiedOutput)
             ) : (
               <div style={{ textAlign: 'center', paddingTop: '4rem', color: 'var(--text-muted)' }}>
                 <p>Simplified output will appear here with audio speech synthesis controls.</p>
