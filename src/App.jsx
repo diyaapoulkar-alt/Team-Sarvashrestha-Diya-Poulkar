@@ -41,7 +41,9 @@ function MainLayout() {
         <main style={{ flex: 1 }}>
           {activeTab === 'hero' && (
             <Hero 
+              onOpenDashboard={() => setActiveTab('dashboard')}
               onLaunchDashboard={() => setActiveTab('dashboard')}
+              onOpenStudio={() => setActiveTab('dashboard')}
             />
           )}
 
@@ -49,18 +51,18 @@ function MainLayout() {
         </main>
 
         {/* Footer */}
-        <footer style={{ background: 'rgba(15, 23, 42, 0.95)', borderTop: '1px solid var(--border-color)', padding: '2rem 1.25rem', textAlign: 'center', marginTop: 'auto' }}>
+        <footer style={{ background: 'rgba(15, 23, 42, 0.95)', borderTop: '1px solid var(--border-color)', padding: '2rem 1.25rem', textAlign: 'center', marginTop: 'auto', color: '#ffffff' }}>
           <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
             <div style={{ textAlign: 'left' }}>
               <span style={{ fontSize: '1.1rem', fontWeight: 800, background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Saathi Accessibility Copilot
               </span>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
                 Inclusive AI Companion for Campus Education
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: '#94a3b8' }}>
               <span>Powered by Groq Cloud AI</span>
               <span>•</span>
               <span>Multimodal Learning</span>

@@ -3,10 +3,20 @@ import { Eye, Ear, Brain, Accessibility, Sparkles, ArrowRight } from 'lucide-rea
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
 
-export default function Hero({ onOpenDashboard, onOpenStudio }) {
+export default function Hero({ onOpenDashboard, onLaunchDashboard, onOpenStudio }) {
   const { activeProfile, applyProfilePreset, targetLanguage } = useAccessibility();
 
   const t = (key) => getTranslation(targetLanguage, key);
+
+  const handleDashboardClick = () => {
+    if (onOpenDashboard) onOpenDashboard();
+    else if (onLaunchDashboard) onLaunchDashboard();
+  };
+
+  const handleStudioClick = () => {
+    if (onOpenStudio) onOpenStudio();
+    else handleDashboardClick();
+  };
 
   return (
     <div className="animate-fade-up" style={{ width: '100%', maxWidth: '1200px', padding: '2rem 1.5rem', margin: '0 auto', color: '#0f172a' }}>
@@ -33,7 +43,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
       {/* Primary Call to Action Buttons */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
         <button 
-          onClick={onOpenDashboard}
+          onClick={handleDashboardClick}
           className="btn-primary glowing-border"
           style={{ padding: '0.9rem 2rem', fontSize: '1.05rem', borderRadius: '16px' }}
         >
@@ -41,7 +51,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
         </button>
 
         <button 
-          onClick={onOpenStudio}
+          onClick={handleStudioClick}
           className="btn-secondary"
           style={{ padding: '0.9rem 2rem', fontSize: '1.05rem', borderRadius: '16px' }}
         >
@@ -83,7 +93,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
           
           {/* Visual Assist Card */}
           <div 
-            onClick={() => { applyProfilePreset('visual'); onOpenDashboard(); }}
+            onClick={() => { applyProfilePreset('visual'); handleDashboardClick(); }}
             className={`glass-card ${activeProfile === 'visual' ? 'glowing-border' : ''}`}
             style={{ cursor: 'pointer' }}
           >
@@ -100,7 +110,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
 
           {/* Hearing Assist Card */}
           <div 
-            onClick={() => { applyProfilePreset('hearing'); onOpenDashboard(); }}
+            onClick={() => { applyProfilePreset('hearing'); handleDashboardClick(); }}
             className={`glass-card ${activeProfile === 'hearing' ? 'glowing-border' : ''}`}
             style={{ cursor: 'pointer' }}
           >
@@ -117,7 +127,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
 
           {/* Cognitive Assist Card */}
           <div 
-            onClick={() => { applyProfilePreset('cognitive'); onOpenDashboard(); }}
+            onClick={() => { applyProfilePreset('cognitive'); handleDashboardClick(); }}
             className={`glass-card ${activeProfile === 'cognitive' ? 'glowing-border' : ''}`}
             style={{ cursor: 'pointer' }}
           >
@@ -134,7 +144,7 @@ export default function Hero({ onOpenDashboard, onOpenStudio }) {
 
           {/* Motor Assist Card */}
           <div 
-            onClick={() => { applyProfilePreset('motor'); onOpenDashboard(); }}
+            onClick={() => { applyProfilePreset('motor'); handleDashboardClick(); }}
             className={`glass-card ${activeProfile === 'motor' ? 'glowing-border' : ''}`}
             style={{ cursor: 'pointer' }}
           >
