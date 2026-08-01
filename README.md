@@ -87,7 +87,7 @@ In modern higher education, traditional university classroom materials present s
 | **OCR Library** | **Tesseract.js + Canvas API** | HTML5 canvas image contrast enhancement and client-side fallback OCR text parsing |
 | **Development Tools** | **VS Code / Command Prompt** | Used for writing code, terminal execution, and local debugging |
 | **Deployment Platform** | **Vercel** | Global serverless edge platform for live production web hosting |
-| **Documentation Tools** | **Markdown / Node Canvas** | Used for writing project documentation and generating high-res architecture diagrams |
+| **Documentation Tools** | **Markdown / Mermaid** | Used for writing project documentation and rendering live interactive flowcharts |
 
 ---
 
@@ -168,10 +168,49 @@ Testing the Smart Accessibility Assistant involves executing the program and ver
 
 ## Workflow & System Architecture Diagrams:
 
-### 1. System Architecture Sequence Diagram
-![System Architecture Sequence Diagram](public/system_architecture_sequence.png)
+### 1. End-to-End PAMR Modality Processing Pipeline Flowchart
 
-### 2. End-to-End Workflow Flowchart
+```mermaid
+flowchart TD
+    A(["🎓 Classroom Input<br/>(Camera Photo / Mic Audio<br/>/ PDF Text / LaTeX)"]) --> B{{"Personalization-Aware<br/>Modality Router (PAMR)"}}
+    
+    B -->|Visual Assist Mode| C["📸 HTML5 Canvas Pre-<br/>Processing & Contrast<br/>Enhancement"]
+    C --> D["👁️ Groq Llama-3.2-11b<br/>Vision AI + Tesseract OCR<br/>Fallback"]
+    D --> E["🔊 4-Part Screen Reader<br/>Audio & Visual Summary"]
+    
+    B -->|Hearing Assist Mode| F["🎤 0ms Web Speech API<br/>Lecture Streamer"]
+    F --> G["💬 Real-Time Auto-<br/>Corrected Captions<br/>(#ffff00)"]
+    G --> H["🌐 Instant Multilingual<br/>Translation (Hindi / Marathi)"]
+    
+    B -->|Cognitive Assist Mode| I["🧠 Groq Llama-3.3-70b<br/>5th-Grade Simplifier"]
+    I --> J["📖 OpenDyslexic<br/>Typography & Focus<br/>Reading Line Guide"]
+    
+    B -->|Math & LaTeX Mode| K["📐 LaTeX Speech Parser"]
+    K --> L["📢 Spoken Natural<br/>Phonetics & Step-by-Step<br/>Symbol Breakdown"]
+```
+
+### 2. Saathi AI Studio (Prof. Sunshine Tutor Sequence)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Student
+    participant WebApp as Saathi PWA Client
+    participant PAMR as PAMR Router Engine
+    participant Groq as Groq Llama-3.3 AI
+    participant Speech as Web SpeechSynthesis
+
+    Student->>WebApp: Click "Pop Quiz Master" / Ask Voice Question
+    WebApp->>PAMR: Route Query + Active Profile Context
+    PAMR->>Groq: Prompt Request (Prof. Sunshine Persona)
+    Groq-->>PAMR: Formatted 4-Part Exam Markdown Response
+    PAMR-->>WebApp: Deliver Interactive Quiz / Story Explanation
+    WebApp->>Speech: Trigger 0ms Natural Voice Audio Readout
+    Speech-->>Student: Spoken Audio Explanation ("Namaste! I am Sunshine...")
+```
+
+### 3. System High-Res Diagram Assets
+![System Architecture Sequence Diagram](public/system_architecture_sequence.png)
 ![End-to-End Workflow Flowchart](public/workflow_diagram.png)
 
 ---
