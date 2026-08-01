@@ -18,7 +18,7 @@
 ---
 
 ## About the Author:
-This project was developed by **Diya Poulkar**, a student of **Computer Science and Engineering (CSE – AI & ML)** at VIT Bhopal. With a strong interest in problem-solving and practical application of programming concepts, Diya focuses on developing simple yet impactful software solutions.
+This project was developed by **Diya Poulkar**, a student of **Computer Science and Engineering** at VIT Bhopal. With a strong interest in problem-solving and practical application of programming concepts, Diya focuses on developing simple yet impactful software solutions.
 
 The **Saathi — Multimodal AI Accessibility Copilot** project reflects her enthusiasm for exploring real-time data handling, web development, cloud AI integration, and API-based application development. She is continuously learning and expanding her technical skills to build projects that are both user-friendly and meaningful in real-world educational contexts.
 
