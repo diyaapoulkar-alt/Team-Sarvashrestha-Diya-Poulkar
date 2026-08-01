@@ -209,9 +209,8 @@ sequenceDiagram
     Speech-->>Student: Spoken Audio Explanation ("Namaste! I am Sunshine...")
 ```
 
-### 3. System High-Res Diagram Assets
+### 3. System Architecture Sequence Diagram Asset
 ![System Architecture Sequence Diagram](public/system_architecture_sequence.png)
-![End-to-End Workflow Flowchart](public/workflow_diagram.png)
 
 ---
 
