@@ -288,6 +288,50 @@ h1, h2, h3, h4, h5, h6, p, span, div, strong, label, input, textarea, select {
    Mobile Responsiveness Enhancements (Smartphones & Mobile Devices)
    ========================================================================== */
 
+/* Navbar Mobile Responsive Utility */
+@media (max-width: 640px) {
+  header {
+    padding: 0.75rem 1rem !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+  }
+  
+  nav {
+    width: 100%;
+    justify-content: center;
+    order: 3;
+    margin-top: 0.25rem;
+  }
+  
+  .badge, .badge-cyan, .badge-emerald {
+    font-size: 0.7rem !important;
+    padding: 0.25rem 0.5rem !important;
+  }
+}
+
+/* Sidebar Mobile Overlay Utility */
+@media (max-width: 768px) {
+  aside {
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
+  }
+}
+
+/* Hero Mobile Utility */
+@media (max-width: 640px) {
+  .hero-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .hero-buttons button {
+    width: 100% !important;
+  }
+}
+
 @media (max-width: 768px) {
   html, body {
     font-size: 15px;

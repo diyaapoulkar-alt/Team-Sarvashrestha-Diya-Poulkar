@@ -1,0 +1,200 @@
+=== Slide 1 ===
+Saathi — Your Accessibility Copilot
+
+PROPOSED BY: SARVASHRESTHA
+An AI companion that translates the world into whichever sense you learn best with.
+
+TRACK 2 — AI AGENT | ACCESSIBILITY COPILOT
+SOFC 2.0
+=== Slide 2 ===
+The Problem — and Our Solution
+The Problem
+Students with accessibility needs juggle 5+ disconnected tools — screen reader, captioner, translator, PDF reader — none aware of each other. Campuses lack a unified, real-time accessibility layer.
+The Solution
+Saathi is a single Progressive Web App powered by one multimodal AI agent. Set your profile once — visual, hearing, cognitive, motor, or language — and any input is routed to the right pipeline, returned in the format you need.
+=== Slide 3 ===
+Key Features
+Camera → Speech
+Describes printed material, lab manuals, and surroundings in real time.
+Live Captioning
+Real-time speech-to-text in Hindi and English for lectures and conversations.
+PDF → Easy-Read
+Simplifies dense academic text and reads it aloud in accessible language.
+Personalisation Profile
+One profile drives all output formatting — audio, captions, or easy-read text.
+Target users: Visually impaired, hearing-impaired, dyslexic/ADHD students, non-native English speakers, and faculty building inclusive classrooms.
+=== Slide 4 ===
+Technical Strategy: Tools
+
+
+Languages
+Python · JavaScript/TypeScript
+
+
+Frontend
+React + Tailwind CSS — PWA, zero install, works on any phone browser
+
+
+Backend
+FastAPI (Python) — lightweight, async-ready
+
+
+AI/ML
+GPT-4o Mini / Gemini · Groq Whisper · Web Speech API
+
+
+Database
+Firebase Auth + Firestore or MongoDB Atlas — free tier
+
+
+Other
+PWA service workers for offline shell · browser-native camera/mic APIs
+=== Slide 5 ===
+Technical Strategy: Methodology
+Core Approach: PAMR
+The Personalisation-Aware Modality Router is a lightweight routing layer between user input and the AI agent. It reads the user's saved profile and input type, then directs each request to the correct pipeline and formats output in the accessible modality that profile requires.
+
+Modular architecture means each feature can be built and tested independently — critical for hackathon timelines.
+=== Slide 6 ===
+Implementation Flow
+
+
+
+
+
+Every input — regardless of type — is processed end-to-end in under 3 seconds, delivering accessible output in the user's preferred modality without any manual routing.
+
+
+=== Slide 7 ===
+Feasibility Analysis
+1
+4-Person Team
+AI/backend, frontend, integration, and design/pitch — roles clearly scoped.
+2
+Zero Cost Stack
+Groq, OpenAI/Gemini, Firebase, and Vercel — all free-tier, hackathon-scale ready.
+3
+No Hardware Needed
+Browser-based PWA — test on 2 phones for camera/mic permissions only.
+4
+No Custom Training
+Every AI module uses an existing pretrained model via API — MVP-ready from day one.
+=== Slide 8 ===
+Strategies to Overcome Challenges
+
+
+
+
+
+
+Challenge
+Mitigation
+Speech-to-text latency
+Keep demo clips under 60 seconds; stream results progressively
+AI misreads image or audio
+Pre-test with 2–3 known-good demo inputs before presenting
+API rate limits mid-demo
+Fallback provider (Gemini ↔ Groq) with automatic retry logic
+Live demo failure
+90-second pre-recorded backup video, always ready to roll
+Feature scope creep
+Locked P0 feature list; stretch goals clearly separated and deferred
+
+=== Slide 9 ===
+Impact & Benefits
+Replaces 5+ fragmented tools with one unified accessibility layer
+Zero-install PWA removes the biggest adoption barrier for assistive tech
+Low operating cost makes it sponsorable via CSR or institutional budgets
+Scalable to any Indian college — same architecture, no customisation needed
+Supports Hindi + English output for non-native-English-medium students
+=== Slide 10 ===
+Why This Idea May Fail
+AI Accuracy Limits
+Vision and speech models can misread in poor lighting, background noise, or with accented speech — a core reliability risk.
+Narrow MVP Scope
+True accessibility (e.g., full sign language support) needs far more than a hackathon build — MVP covers only a subset.
+Adoption Inertia
+Students already using Google Live Transcribe or Speechify may be slow to switch to a new tool.
+API Dependency
+Free-tier rate limits or provider downtime directly affect reliability during critical demo moments.
+Institutional Buy-In Needed
+Lecture-level captioning requires faculty cooperation and mic access — outside the team's direct control.
+=== Slide 11 ===
+                                 REFERENCES
+Book
+Manduchi, R., & Coughlan, J. (2012). The Role of Computer Vision in Accessible Technology. Proceedings of the IEEE, 100(5), 1680–1698.
+(A foundational, frequently-cited reference text on computer vision applied to accessibility — solid to list even though it's a journal chapter rather than a standalone book, if your form allows academic references broadly.)
+Research Paper
+Recent advancements in large multimodal models have significantly advanced assistive technologies, empowering blind or visually impaired individuals to independently access, interpret, and interact with their environments — from "Probing the Gaps in ChatGPT Live Video Chat for Real-World Assistance for People who are Blind or Visually Impaired," ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '25), 2025. arxiv
+Also strong: Karamolegkou, A., et al. (2025). "Evaluating multimodal language models as visual assistants for visually impaired users." Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics. arXiv
+Blog
+   Microsoft — "Seeing AI: Helping People See the World" (microsoft.com/en-us/ai/seeing-ai) — good real-world             reference since your project directly parallels this product's functionality.
+=== Slide 12 ===
+
+=== Slide 13 ===
+Why Choose Saathi?
+An AI-powered accessibility platform that brings every assistive technology together — intelligently, seamlessly, and personally.
+
+
+All-in-One Platform
+No more switching between apps — vision, speech, text, and math assistance in a single system.
+
+
+Automatic AI Routing
+Personalized accessibility profiles eliminate manual configuration entirely.
+
+
+Browser-Based PWA
+No installation required — accessible anywhere, on any device.
+
+One Platform
+For every accessibility need
+
+Personalized AI
+Tailored to each individual
+
+Cost-Effective
+Easy to use and scalable
+=== Slide 14 ===
+How Saathi Works
+Personalization
+Capture Input
+Select Profile
+User Login
+
+KEY ADVANTAGE
+The PAMR Difference
+The Personalization-Aware Modality Router (PAMR) is the intelligence at Saathi's core. It automatically selects the right AI model based on each user's accessibility profile and input type — ensuring seamless, zero-effort personalization at every step.
+Input Types
+Image, Audio, PDF, or Text
+Output Formats
+Audio, Captions, Simplified Text, Voice Assistance
+=== Slide 15 ===
+Future Vision & Scalability
+
+
+SHORT-TERM GOALS
+More Indian Languages
+Expanding linguistic accessibility across regional communities.
+Offline Mode
+Accessibility that works without an internet connection.
+Improved AI Accuracy
+Continuous model refinement for better outcomes.
+
+LONG-TERM GOALS
+Smart Classroom Integration
+LMS support and AI-powered campus navigation.
+Wearable Devices
+Extending accessibility to wearable technology.
+Nationwide Deployment
+Scaling across schools and universities throughout India.
+"To build an inclusive digital learning ecosystem where every student, regardless of ability, can access education independently through AI."
+
+=== Slide 16 ===
+                                 
+
+                                  
+                          THANK YOU
+
+
+
