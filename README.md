@@ -49,7 +49,7 @@ The **Saathi — Multimodal AI Accessibility Copilot** is a smart accessibility 
 
 In modern higher education, traditional university classroom materials present severe challenges:
 1. **Domain & Visual Challenge**: Visually Impaired Students struggle to read blackboards, lab manuals, or handwritten notes during fast-paced lectures.
-2. **Audio & Hearing Challenge**: Deaf & Hard-of-Hearing Students miss verbal explanations and complex technical terms during live professor streams.
+2. **Audio & Hearing Challenge**: Deaf & Hard-of-Hearing Students miss verbal explanations and technical terms during live professor streams.
 3. **Cognitive Challenge**: Neurodivergent & Dyslexic Students experience cognitive overload when reading dense textbooks and multi-variable equations.
 
 ### Key Functionality:
@@ -87,7 +87,7 @@ In modern higher education, traditional university classroom materials present s
 | **OCR Library** | **Tesseract.js + Canvas API** | HTML5 canvas image contrast enhancement and client-side fallback OCR text parsing |
 | **Development Tools** | **VS Code / Command Prompt** | Used for writing code, terminal execution, and local debugging |
 | **Deployment Platform** | **Vercel** | Global serverless edge platform for live production web hosting |
-| **Documentation Tools** | **Markdown / Mermaid** | Used for writing project documentation and generating architecture diagrams |
+| **Documentation Tools** | **Markdown / Node Canvas** | Used for writing project documentation and generating high-res architecture diagrams |
 
 ---
 
@@ -166,29 +166,13 @@ Testing the Smart Accessibility Assistant involves executing the program and ver
 
 ---
 
-## Workflow Diagram:
+## Workflow & System Architecture Diagrams:
 
-```
-+--------------------------------------------------------------------------------------------------+
-|                                 SAATHI WORKFLOW FLOWCHART                                        |
-+--------------------------------------------------------------------------------------------------+
-|                                                                                                  |
-| [ User Input (Camera Photo / Mic Audio / PDF Text / LaTeX Formula) ]                             |
-|                                  |                                                               |
-|                                  v                                                               |
-| [ Domain & Accessibility Mode Selection (Visual / Hearing / Cognitive / Math) ]                  |
-|                                  |                                                               |
-|                                  v                                                               |
-| [ Language Selection (English / Hindi / Marathi) ]                                               |
-|                                  |                                                               |
-|                                  v                                                               |
-| [ Multimodal Engine Processing (Groq Vision AI / Web Speech 0ms Subtitles / Llama 3.3 Simplifier)]|
-|                                  |                                                               |
-|                                  v                                                               |
-| [ Final Output (Screen Reader Audio / High-Contrast Yellow Captions / Dyslexia Text / PDF) ]     |
-|                                                                                                  |
-+--------------------------------------------------------------------------------------------------+
-```
+### 1. System Architecture Sequence Diagram
+![System Architecture Sequence Diagram](public/system_architecture_sequence.png)
+
+### 2. End-to-End Workflow Flowchart
+![End-to-End Workflow Flowchart](public/workflow_diagram.png)
 
 ---
 
