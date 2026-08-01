@@ -1,10 +1,10 @@
 import React from 'react';
-import { LayoutDashboard, Sparkles, UserCheck, Key } from 'lucide-react';
+import { LayoutDashboard, Sparkles, UserCheck } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
 import SaathiLogoIcon from './SaathiLogoIcon';
 
-export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpenApiKeyModal }) {
+export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal }) {
   const { user, activeProfile, targetLanguage, setActiveTool } = useAccessibility();
 
   const t = (key) => getTranslation(targetLanguage, key);
@@ -86,17 +86,8 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpe
         </button>
       </nav>
 
-      {/* Right User Badge & API Key Control */}
+      {/* Right User Badge */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <button 
-          onClick={onOpenApiKeyModal}
-          className="btn-secondary"
-          style={{ padding: '0.4rem 0.65rem', fontSize: '0.78rem' }}
-          title="Configure API Keys"
-        >
-          <Key size={13} color="#0284c7" /> API Key
-        </button>
-
         <div 
           onClick={onOpenAuthModal}
           className="badge" 
