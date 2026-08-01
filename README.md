@@ -180,17 +180,6 @@ Below is the end-to-end interactions between the **Student**, **Dashboard**, **P
 
 ---
 
-## 🎯 Competition & Judge Defense Cheat-Sheet
-
-| Question | Recommended Response |
-| :--- | :--- |
-| **Why React & Vite?** | React 18 provides modular component state reactivity for switching accessibility profiles instantly without reloading. Vite gives sub-second startup times and 190ms production builds. |
-| **What is used for the Backend?** | A **Serverless Edge AI Architecture** powered by Groq Cloud API (Llama-3.3 & Llama-3.2 Vision) and client-side browser Web Speech APIs. This delivers zero-latency performance with zero server hosting costs. |
-| **How does PAMR work?** | PAMR (Personalization-Aware Modality Router) checks the user's active profile and language, then routes inputs (photos, mic stream, text) into the student's required sensory output format. |
-| **How do you handle garbled handwritten OCR?** | We pass images through an HTML5 canvas contrast enhancement pipeline, run Groq Vision AI with 4-part structured prompt constraints, and fall back to client-side Tesseract.js. |
-
----
-
 ## 🏆 Team Sarvashrestha
 
 Developed with ❤️ for **SOFC 2.0 Hackathon** to make university education universally accessible to all students.
