@@ -283,3 +283,59 @@ h1, h2, h3, h4, h5, h6, p, span, div, strong, label, input, textarea, select {
 @keyframes spin {
   100% { transform: rotate(360deg); }
 }
+
+/* ==========================================================================
+   Mobile Responsiveness Enhancements (Smartphones & Mobile Devices)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  html, body {
+    font-size: 15px;
+  }
+
+  .glass-panel {
+    border-radius: 16px !important;
+    padding: 1rem !important;
+  }
+
+  .glass-card {
+    border-radius: 14px !important;
+    padding: 1rem !important;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 0.6rem 1rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Fullpage Studio Responsive Flex Stack */
+  .saathi-chatbot-fullpage {
+    flex-direction: column !important;
+    min-height: auto !important;
+  }
+
+  .saathi-tutor-showcase-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html, body {
+    font-size: 14px;
+  }
+
+  .glass-panel {
+    border-radius: 12px !important;
+    padding: 0.85rem !important;
+  }
+
+  .glass-card {
+    border-radius: 12px !important;
+    padding: 0.75rem !important;
+  }
+
+  input, textarea, select, button {
+    max-width: 100%;
+  }
+}

@@ -264,10 +264,10 @@ export default function SaathiChatbot({ isFullPage = false }) {
   // Full-page Studio View inside dashboard tab
   if (isFullPage) {
     return (
-      <div className="glass-panel animate-fade-up" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', gap: '1.5rem', background: '#ffffff', color: '#0f172a', minHeight: '660px' }}>
+      <div className="glass-panel animate-fade-up saathi-chatbot-fullpage" style={{ borderRadius: '24px', padding: '1.5rem', display: 'flex', gap: '1.5rem', background: '#ffffff', color: '#0f172a', minHeight: '660px', flexWrap: 'wrap' }}>
         
         {/* Left Column: Chat Conversation Stream */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: '280px' }}>
           
           {/* Header Bar */}
           <div style={{ paddingBottom: '1.1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
@@ -283,7 +283,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               {isMicActive && (
                 <span className="badge-emerald" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                   <Radio size={12} className="recording-pulse" /> Voice Mic Active
@@ -380,7 +380,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
                 color: '#0f172a',
                 fontSize: '0.95rem',
                 outline: 'none',
-                fontWeight: 500
+                fontWeight: 500,
+                minWidth: '120px'
               }}
             />
 
@@ -393,7 +394,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
         {/* Right Column: Bigger Lady Tutor Image Showcase Panel */}
         <div 
-          className="glass-card animate-pop" 
+          className="glass-card animate-pop saathi-tutor-showcase-panel" 
           style={{
             width: '280px',
             background: 'linear-gradient(180deg, #fdf2f8 0%, #f1f5f9 100%)',
@@ -406,7 +407,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
             textAlign: 'center',
             gap: '1rem',
             boxShadow: '0 8px 30px rgba(236, 72, 153, 0.15)',
-            flexShrink: 0
+            flexShrink: 0,
+            margin: '0 auto'
           }}
         >
           {/* Speech Bubble over Tutor */}
@@ -468,10 +470,10 @@ export default function SaathiChatbot({ isFullPage = false }) {
           className="btn-primary glowing-border"
           style={{
             position: 'fixed',
-            bottom: '24px',
-            right: '24px',
-            width: '68px',
-            height: '68px',
+            bottom: '20px',
+            right: '20px',
+            width: '64px',
+            height: '64px',
             borderRadius: '50%',
             padding: 0,
             display: 'flex',
@@ -483,7 +485,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
           }}
           title="Ask Sunshine Your Tutor"
         >
-          <LadyTutorAvatar size={48} />
+          <LadyTutorAvatar size={44} />
         </button>
       )}
 
@@ -493,11 +495,11 @@ export default function SaathiChatbot({ isFullPage = false }) {
           className="glass-panel animate-pop"
           style={{
             position: 'fixed',
-            bottom: '24px',
-            right: '24px',
-            width: isExpanded ? '540px' : '400px',
-            height: isExpanded ? '670px' : '550px',
-            maxHeight: '85vh',
+            bottom: '16px',
+            right: '16px',
+            width: isExpanded ? 'min(540px, 94vw)' : 'min(400px, 94vw)',
+            height: isExpanded ? 'min(670px, 85vh)' : 'min(550px, 80vh)',
+            maxHeight: '88vh',
             borderRadius: '24px',
             display: 'flex',
             flexDirection: 'column',
@@ -604,7 +606,8 @@ export default function SaathiChatbot({ isFullPage = false }) {
                 color: '#0f172a',
                 fontSize: '0.85rem',
                 outline: 'none',
-                fontWeight: 500
+                fontWeight: 500,
+                minWidth: '80px'
               }}
             />
 
