@@ -74,6 +74,15 @@ In modern higher education, traditional university classroom materials present s
 3. **👩‍🏫 Saathi AI Studio (Sunshine Tutor)**: Features **Prof. Sunshine**, an interactive AI Lady Educator for 1-click pop quizzes, 5th-grade story explanations, academic jokes, and voice tutoring.
 4. **Mandatory Multilingual Selection**: 1-click dynamic full-site translation across English, Hindi, and Marathi.
 
+### 📊 ASSISTIVE PROFILES & SENSORY ROUTING MATRIX
+
+| Profile Mode | Target Audience | Classroom Input | Output Sensory Modality | Core Technology Engine |
+| :--- | :--- | :--- | :--- | :--- |
+| **👁️ Visual Assist** | Blind & Low-Vision Students | Blackboard photos, lab manuals, handwritten notes | Screen Reader Speech Audio + Structured Text | Groq Llama-3.2 Vision + Canvas OCR Filter |
+| **🎤 Hearing Assist** | Deaf & Hard-of-Hearing Students | Live professor lecture voice stream | Real-time 0ms Subtitles (`#ffff00`) + TXT Export | Web Speech API + Academic Term Auto-Corrector |
+| **🧠 Cognitive Assist** | ADHD & Dyslexia Students | Dense PDF passages, complex academic articles | 5th-Grade Bullet Points + OpenDyslexic Font | Groq Llama-3.3-70b + Focus Line Guide Mask |
+| **📐 Motor / Math Assist** | Motor Impairments & Math Anxiety | Raw LaTeX equations, multi-variable formulas | Spoken Natural Phonetics + Symbol Steps | Groq Llama-3.1-8b + SpeechSynthesis |
+
 ---
 
 ## TECHNOLOGIES/TOOLS USED:
@@ -136,6 +145,16 @@ This project is a smart accessibility assistant built with Node.js and React. Yo
 ## Instructions for Testing:
 
 Testing the Smart Accessibility Assistant involves executing the program and verifying that the core interactive selection process functions correctly, leading to an accurately filtered accessibility output.
+
+### 📋 TEST CASE VERIFICATION MATRIX
+
+| Test ID | Feature Area | Input Payload | Expected Sensory Output | Verification Status |
+| :---: | :--- | :--- | :--- | :---: |
+| **TC-01** | Visual Assist Camera | Handwritten notes photo / lab manual | Structured 4-part summary + audio speech narration | ✅ Passed |
+| **TC-02** | Lecture Captioner | Microphone speech input (*"Ohm's Law"*) | Real-time 0ms subtitles (`#ffff00`) + Hindi/Marathi text | ✅ Passed |
+| **TC-03** | Cognitive Simplifier | Complex university textbook passage | 5th-grade bullet points in OpenDyslexic font | ✅ Passed |
+| **TC-04** | Saathi AI Studio | Voice question / Pop Quiz trigger | Interactive response from Prof. Sunshine + audio readout | ✅ Passed |
+| **TC-05** | Math LaTeX Reader | Raw LaTeX (`\int_{0}^{\infty} e^{-x^2} dx`) | Spoken natural phonetics + step breakdown | ✅ Passed |
 
 ### Test Case 1: Visual Assist Camera & OCR Verification
 1. Execute the application and navigate to **Visual Assist** mode.
