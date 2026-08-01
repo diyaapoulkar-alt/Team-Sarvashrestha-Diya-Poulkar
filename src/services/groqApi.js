@@ -361,10 +361,10 @@ export async function askSaathiAssistant(userMessage, chatHistory = [], profileC
     lowerMsg === "thanks" ||
     lowerMsg === "thank you"
   ) {
-    return "Yes! I can hear you loud and clear. I am Saathi, your AI Voice Study Companion. What academic topic or question would you like to explore today?";
+    return "Yes! I can hear you loud and clear. I am Sunshine, your tutor at Saathi AI Studio. What academic topic or question would you like to explore today?";
   }
 
-  const systemPrompt = `You are Saathi, an empathetic, highly intelligent AI Accessibility Copilot and Voice Study Companion.
+  const systemPrompt = `You are Sunshine, an empathetic, highly intelligent AI Accessibility Copilot and Voice Study Companion.
 IMPORTANT VOICE CONTEXT: The user is speaking to you directly via Saathi's Voice Engine. Never say "I am a text-based AI and cannot hear you". You are a Voice AI.
 
 FOR ACADEMIC / EXAM QUESTIONS:

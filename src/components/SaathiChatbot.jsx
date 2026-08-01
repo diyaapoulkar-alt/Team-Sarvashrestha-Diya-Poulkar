@@ -11,7 +11,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
   const [isExpanded, setIsExpanded] = useState(isFullPage);
   const [isMicActive, setIsMicActive] = useState(false);
 
-  const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am your AI Lady Tutor at Saathi AI Studio. Ask me any academic concept, homework question, or click one of the interactive study modes!';
+  const greetingText = 'Namaste! Bonjour! Hello! Konnichiwa! ¡Hola! I am Sunshine, your tutor at Saathi AI Studio. Ask me any academic concept, homework question, or click one of the interactive study modes!';
 
   const [messages, setMessages] = useState([
     {
@@ -278,7 +278,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
                   Saathi AI Studio 👩‍🏫
                 </h3>
                 <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                  Interactive Lady AI Tutor for academic explanations, pop quizzes, and exam prep.
+                  Interactive AI Tutor for academic explanations, pop quizzes, and exam prep.
                 </p>
               </div>
             </div>
@@ -344,7 +344,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
             {loading && (
               <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <LadyTutorAvatar size={32} />
-                <RefreshCw size={14} className="spin" /> Lady AI Tutor is generating answer & voice...
+                <RefreshCw size={14} className="spin" /> Sunshine is generating answer & voice...
               </div>
             )}
 
@@ -368,7 +368,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             <input 
               type="text"
-              placeholder={isMicActive ? "Listening to your voice..." : "Ask Lady AI Tutor any study question..."}
+              placeholder={isMicActive ? "Listening to your voice..." : "Ask Sunshine your tutor any study question..."}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{
@@ -411,7 +411,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
         >
           {/* Speech Bubble over Tutor */}
           <div style={{ background: '#ffffff', border: '1px solid #f472b6', padding: '0.75rem 0.9rem', borderRadius: '16px', fontSize: '0.85rem', color: '#0f172a', fontWeight: 600, boxShadow: '0 4px 14px rgba(0,0,0,0.06)', position: 'relative' }}>
-            "Namaste! I am your AI Lady Tutor. Let's master your syllabus together!"
+            "Namaste! I am Sunshine, your tutor. Let's master your syllabus together!"
             <div style={{ position: 'absolute', bottom: '-8px', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderTop: '8px solid #ffffff' }} />
           </div>
 
@@ -419,7 +419,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
           <div style={{ position: 'relative', width: '210px', height: '230px', filter: 'drop-shadow(0 10px 20px rgba(236, 72, 153, 0.25))' }}>
             <img 
               src="/lady_tutor.jpg?v=3" 
-              alt="AI Lady Tutor Character" 
+              alt="Sunshine AI Tutor Character" 
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
           </div>
@@ -429,7 +429,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
             <div className="badge-emerald" style={{ padding: '0.35rem 0.75rem', fontSize: '0.78rem', marginBottom: '0.5rem' }}>
               <CheckCircle size={14} /> Tutor Online & Active
             </div>
-            <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a' }}>Prof. Saathi AI</h4>
+            <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a' }}>Prof. Sunshine</h4>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Multimodal AI Campus Educator</p>
           </div>
 
@@ -481,7 +481,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
             zIndex: 99,
             background: 'linear-gradient(135deg, #ec4899 0%, #a855f7 100%)'
           }}
-          title="Ask Lady AI Tutor"
+          title="Ask Sunshine Your Tutor"
         >
           <LadyTutorAvatar size={48} />
         </button>
@@ -516,7 +516,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
               <LadyTutorAvatar size={40} />
               <div>
                 <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>Saathi AI Studio 👩‍🏫</h4>
-                <span style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>Lady AI Voice Tutor</span>
+                <span style={{ fontSize: '0.72rem', color: '#0284c7', fontWeight: 600 }}>Sunshine — AI Tutor</span>
               </div>
             </div>
 
@@ -568,7 +568,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             {loading && (
               <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <LadyTutorAvatar size={24} /> Lady AI Tutor is typing...
+                <LadyTutorAvatar size={24} /> Sunshine is typing...
               </div>
             )}
 
@@ -592,7 +592,7 @@ export default function SaathiChatbot({ isFullPage = false }) {
 
             <input 
               type="text"
-              placeholder={isMicActive ? "Listening to your voice..." : "Ask Lady AI Tutor any study question..."}
+              placeholder={isMicActive ? "Listening to your voice..." : "Ask Sunshine your tutor any study question..."}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               style={{
