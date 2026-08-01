@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AccessibilityProvider, useAccessibility } from './context/AccessibilityContext';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
@@ -12,9 +12,20 @@ import './styles/design-system.css';
 
 function MainLayout() {
   const [activeTab, setActiveTab] = useState('hero'); // 'hero' | 'dashboard' | 'studio'
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  // Auto-collapse sidebar on mobile screens by default
+  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' && window.innerWidth > 768);
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>

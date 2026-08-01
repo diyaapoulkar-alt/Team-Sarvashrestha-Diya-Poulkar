@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Eye, Ear, Brain, Accessibility, ChevronLeft, ChevronRight, 
   Type, Globe, BookOpen, Focus, Sparkles
@@ -24,10 +24,20 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
     activeTool
   } = useAccessibility();
 
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const t = (key) => getTranslation(targetLanguage, key);
 
   const closeMobileSidebar = () => {
-    if (window.innerWidth <= 768) {
+    if (isMobile) {
       setIsOpen(false);
     }
   };
@@ -48,61 +58,124 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
     closeMobileSidebar();
   };
 
+  // Determine sidebar width & position on mobile vs desktop
+  const sidebarWidth = isMobile ? (isOpen ? '280px' : '0px') : (isOpen ? '280px' : '76px');
+
   return (
     <>
-      {/* Mobile Backdrop Overlay */}
-      {isOpen && window.innerWidth <= 768 && (
+      {/* Mobile Translucent Backdrop Overlay */}
+      {isOpen && isMobile && (
         <div 
           onClick={() => setIsOpen(false)}
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(15, 23, 42, 0.4)',
+            background: 'rgba(15, 23, 42, 0.45)',
             backdropFilter: 'blur(4px)',
             zIndex: 105
           }}
         />
       )}
 
-      <aside style={{
-        width: isOpen ? '280px' : '76px',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        background: 'rgba(241, 245, 249, 0.98)',
-        borderRight: '1px solid var(--border-color)',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        zIndex: 110,
-        backdropFilter: 'blur(16px)',
-        flexShrink: 0,
-        overflow: 'visible',
-        color: '#0f172a'
-      }}>
-
-        {/* 100% Fully Visible Toggle Arrow Button - Positioned Below Navbar */}
+      {/* Floating Arrow Pull Button on Mobile when Collapsed */}
+      {isMobile && !isOpen && (
         <button 
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(true)}
+          className="btn-primary glowing-border animate-pop"
           style={{
-            position: 'absolute',
-            top: '85px',
-            right: '-16px',
-            width: '32px',
-            height: '32px',
+            position: 'fixed',
+            top: '75px',
+            left: '12px',
+            width: '40px',
+            height: '40px',
             borderRadius: '50%',
-            background: 'var(--accent-primary)',
-            border: '2px solid #ffffff',
-            color: '#ffffff',
+            padding: 0,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
-            zIndex: 999
+            boxShadow: '0 6px 20px rgba(71, 85, 105, 0.4)',
+            zIndex: 120,
+            background: 'var(--gradient-brand)',
+            color: '#ffffff',
+            border: '2px solid #ffffff'
           }}
-          title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+          title="Open Accessibility Dashboard Menu"
         >
-          {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+          <ChevronRight size={22} />
         </button>
+      )}
+
+      <aside style={{
+        width: sidebarWidth,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        background: 'rgba(241, 245, 249, 0.98)',
+        borderRight: (isMobile && !isOpen) ? 'none' : '1px solid var(--border-color)',
+        display: 'flex',
+        flexDirection: 'column',
+        position: isMobile ? 'fixed' : 'relative',
+        top: isMobile ? 0 : 'auto',
+        bottom: isMobile ? 0 : 'auto',
+        left: isMobile ? 0 : 'auto',
+        height: isMobile ? '100vh' : 'auto',
+        zIndex: 110,
+        backdropFilter: 'blur(16px)',
+        flexShrink: 0,
+        overflow: (isMobile && !isOpen) ? 'hidden' : 'visible',
+        color: '#0f172a'
+      }}>
+
+        {/* Desktop Toggle Arrow Button */}
+        {!isMobile && (
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            style={{
+              position: 'absolute',
+              top: '85px',
+              right: '-16px',
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: 'var(--accent-primary)',
+              border: '2px solid #ffffff',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+              zIndex: 999
+            }}
+            title={isOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+          >
+            {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+          </button>
+        )}
+
+        {/* Mobile Close Button inside drawer */}
+        {isMobile && isOpen && (
+          <button 
+            onClick={() => setIsOpen(false)}
+            style={{
+              position: 'absolute',
+              top: '16px',
+              right: '12px',
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: 'rgba(71,85,105,0.15)',
+              border: '1px solid var(--border-color)',
+              color: '#0f172a',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 999
+            }}
+            title="Close Drawer"
+          >
+            <ChevronLeft size={18} />
+          </button>
+        )}
 
         {/* Sidebar Header */}
         <div style={{ padding: '1.25rem 1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
