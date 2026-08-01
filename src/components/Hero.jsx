@@ -4,7 +4,7 @@ import { useAccessibility } from '../context/AccessibilityContext';
 import { getTranslation } from '../utils/translations';
 
 export default function Hero({ onOpenDashboard, onLaunchDashboard, onOpenStudio }) {
-  const { activeProfile, applyProfilePreset, targetLanguage } = useAccessibility();
+  const { activeProfile, applyProfilePreset, targetLanguage, setActiveTool } = useAccessibility();
 
   const t = (key) => getTranslation(targetLanguage, key);
 
@@ -14,6 +14,7 @@ export default function Hero({ onOpenDashboard, onLaunchDashboard, onOpenStudio 
   };
 
   const handleStudioClick = () => {
+    setActiveTool('chatgpt');
     if (onOpenStudio) onOpenStudio();
     else handleDashboardClick();
   };

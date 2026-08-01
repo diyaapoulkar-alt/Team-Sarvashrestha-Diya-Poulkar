@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AccessibilityProvider } from './context/AccessibilityContext';
+import { AccessibilityProvider, useAccessibility } from './context/AccessibilityContext';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -11,7 +11,7 @@ import AuthModal from './components/AuthModal';
 import './styles/design-system.css';
 
 function MainLayout() {
-  const [activeTab, setActiveTab] = useState('hero'); // 'hero' | 'dashboard'
+  const [activeTab, setActiveTab] = useState('hero'); // 'hero' | 'dashboard' | 'studio'
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -43,11 +43,11 @@ function MainLayout() {
             <Hero 
               onOpenDashboard={() => setActiveTab('dashboard')}
               onLaunchDashboard={() => setActiveTab('dashboard')}
-              onOpenStudio={() => setActiveTab('dashboard')}
+              onOpenStudio={() => setActiveTab('studio')}
             />
           )}
 
-          {activeTab === 'dashboard' && <Dashboard />}
+          {(activeTab === 'dashboard' || activeTab === 'studio') && <Dashboard />}
         </main>
 
         {/* Footer */}

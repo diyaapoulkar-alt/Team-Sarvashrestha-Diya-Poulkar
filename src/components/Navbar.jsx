@@ -5,9 +5,18 @@ import { getTranslation } from '../utils/translations';
 import SaathiLogoIcon from './SaathiLogoIcon';
 
 export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpenApiKeyModal }) {
-  const { user, activeProfile, targetLanguage } = useAccessibility();
+  const { user, activeProfile, targetLanguage, setActiveTool } = useAccessibility();
 
   const t = (key) => getTranslation(targetLanguage, key);
+
+  const handleDashboardClick = () => {
+    setActiveTab('dashboard');
+  };
+
+  const handleStudioClick = () => {
+    setActiveTool('chatgpt');
+    setActiveTab('studio');
+  };
 
   return (
     <header style={{
@@ -56,7 +65,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpe
       {/* Center Nav Items */}
       <nav style={{ display: 'flex', gap: '0.75rem' }}>
         <button
-          onClick={() => setActiveTab('dashboard')}
+          onClick={handleDashboardClick}
           className={`btn-secondary ${activeTab === 'dashboard' ? 'glowing-border' : ''}`}
           style={{ padding: '0.55rem 1.1rem', fontSize: '0.88rem' }}
         >
@@ -65,7 +74,7 @@ export default function Navbar({ activeTab, setActiveTab, onOpenAuthModal, onOpe
         </button>
 
         <button
-          onClick={() => setActiveTab('studio')}
+          onClick={handleStudioClick}
           className={`btn-secondary ${activeTab === 'studio' ? 'glowing-border' : ''}`}
           style={{ padding: '0.55rem 1.1rem', fontSize: '0.88rem' }}
         >

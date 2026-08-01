@@ -36,7 +36,7 @@ export default function Sidebar({ isOpen, setIsOpen, onSelectMode }) {
   const handleStudioClick = () => {
     setActiveTool('chatgpt');
     if (onSelectMode) {
-      onSelectMode('dashboard');
+      onSelectMode('studio');
     }
   };
 
